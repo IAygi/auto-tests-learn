@@ -18,9 +18,9 @@ public class DbConnect {
 
     @Step("SQL request")
     public ResultSet getRequest(String sqlRequest) {
-        log.debug("DB connection with sql: {sqlRequest}");
+        log.debug("DB connection with sql");
         try {
-            connection = DriverManager.getConnection(DbData.dbUrl, DbData.dbUser, DbData.dbPassword);
+            connection = DriverManager.getConnection(DbData.psqlUrl, DbData.dbUser, DbData.dbPassword);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -42,7 +42,7 @@ public class DbConnect {
 
     @Step("SQL request")
     public List getAllUsers(ResultSet resultSet) {
-        log.debug("GET all users: {resultSet}");
+        log.debug("GET all users");
         List<UsersDTO> listObjects;
 
         try {
@@ -66,7 +66,7 @@ public class DbConnect {
 
     @Step("SQL request")
     public List createUser(ResultSet resultSet) {
-        log.debug("POST user: {resultSet}");
+        log.debug("Create user");
         List<UsersDTO> listObjects;
 
         try {

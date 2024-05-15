@@ -2,6 +2,5 @@ package ru.iaygi.db.data;
 
 public class Sql {
 
-    public final String getAllUsers = "SELECT * FROM users";
-    public final String insertUser = "";
+    public final String getCustomers = "SELECT * FROM customers";
 }

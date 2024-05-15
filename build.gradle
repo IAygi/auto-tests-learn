@@ -57,6 +57,7 @@ dependencies {
     testCompileOnly "org.projectlombok:lombok:$lombokVersion"
     testAnnotationProcessor "org.projectlombok:lombok:$lombokVersion"
     implementation "mysql:mysql-connector-java:8.0.33"
+    implementation "org.postgresql:postgresql:42.7.3"
     implementation "com.fasterxml.jackson.core:jackson-databind:2.17.0"
 }
 

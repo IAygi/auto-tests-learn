@@ -28,6 +28,10 @@
 ```sh
 ./gradlew allureServe
 ```
+Для тестирования БД нужно: 
+1. [Развернуть](https://www.asozykin.ru/posts/demo_database_sql_foundation) локально PostgreSQL
+2. Создать тенстовую БД по [инструкции](https://www.asozykin.ru/posts/demo_database_sql_foundation#rec267589724) 
+3. В классе **DbData** (java/ru/iaygi/db/data/DbData.java) в переменной **dbPassword** прописать свой пароль для соединения с PostgreSQL  
 
 ## Обучение
 

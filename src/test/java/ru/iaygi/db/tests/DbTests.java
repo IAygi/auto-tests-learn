@@ -20,7 +20,7 @@ import static org.assertj.core.groups.Tuple.tuple;
 
 @Severity(CRITICAL)
 @Tag("db_test")
-@Tag("smouke")
+@Tag("smoke")
 @Epic("Users")
 @Feature("Работа с пользователями через БД")
 public class DbTests extends DbConnect {
@@ -42,20 +42,24 @@ public class DbTests extends DbConnect {
 
 
     @Test
-    @DisplayName("Получение списка пользователей из БД")
-    @Description("Проверить корректное получение списка пользователей из БД")
+    @DisplayName("Получение списка покупателей из БД")
+    @Description("Проверить корректное получение списка покупателей из БД")
     void getAllUsers() {
-        step("Сделать SQL запрос на получение пользователей", () -> {
-            resultSet = getRequest(sql.getAllUsers);
+        int id = 1;
+        String name = "Иван Петров";
+        String email = "petrov@mail.ru";
+
+        step("Сделать SQL запрос на получение покупателей", () -> {
+            resultSet = getRequest(sql.getCustomers);
         });
 
-        step("Получить коллекцию пользователей", () -> {
-            list = dbMethods.getAllUsers(resultSet);
+        step("Получить коллекцию покупателей", () -> {
+            list = dbMethods.getCustomers(resultSet);
         });
 
-        step("Убедиться, что в списке есть базовй пользователь", () -> {
-            assertThat(list).extracting("login", "name", "surname")
-                    .contains(tuple("admin", "admin", "admin"));
+        step("Проверить покупателя №1", () -> {
+            assertThat(list).extracting("id", "name", "email")
+                    .contains(tuple(id, name, email));
         });
     }
 }
