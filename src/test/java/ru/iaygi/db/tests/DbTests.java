@@ -25,10 +25,10 @@ import static org.assertj.core.groups.Tuple.tuple;
 @Feature("Работа с пользователями через БД")
 public class DbTests extends DbConnect {
 
-    Sql sql = new Sql();
-    ResultSet resultSet;
-    DbMethods dbMethods = new DbMethods();
-    List<UsersDTO> list;
+    private Sql sql = new Sql();
+    private ResultSet resultSet;
+    private DbMethods dbMethods = new DbMethods();
+    private List<UsersDTO> list;
 
     @BeforeEach
     void prepare() {
