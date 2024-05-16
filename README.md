@@ -1,5 +1,5 @@
 # Тестовый проект для обучения автоматизации тестирования
-Проект автоматизации тестирования REST API, Web UI и базы данных.
+#### Проект автоматизации тестирования REST API, Web UI и Database
 
 ## Содержание
 - [Технологии](#технологии)
@@ -19,16 +19,34 @@
 
 ## Тестирование
 
-Запуск тестов:
+### Запуск тестов
 ```sh
-./gradlew test
+./gradlew clean test
 ```
 
 Открытие Allure отчёта в браузере:
 ```sh
 ./gradlew allureServe
 ```
-Для тестирования БД нужно: 
+
+### Группировка тестов
+Запускаемые тесты можно группировать, посредством присваивания тегов классам или методам.
+
+Теги прописываются в [build.gradle](build.gradle) в тасках:
+```groovy
+task smoke_tests(type: Test) {
+    useJUnitPlatform {
+        includeTags("smoke")
+    }
+}
+```
+Таски запускаются следующим образом:
+```sh
+./gradlew clean smoke_tests
+```
+### Тестирование БД
+
+Для тестирования базы данных (PostgreSQL) нужно: 
 1. [Развернуть](https://www.asozykin.ru/posts/demo_database_sql_foundation) локально PostgreSQL
 2. Создать тенстовую БД по [инструкции](https://www.asozykin.ru/posts/demo_database_sql_foundation#rec267589724) 
 3. В классе **DbData** (java/ru/iaygi/db/data/DbData.java) в переменной **dbPassword** прописать свой пароль для соединения с PostgreSQL  
