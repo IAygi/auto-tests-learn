@@ -3,7 +3,7 @@ package ru.iaygi.api.rest;
 import io.qameta.allure.Step;
 import ru.iaygi.api.service.RestExecutor;
 import ru.iaygi.dto.UpdateUserDTO;
-import ru.iaygi.dto.UsersDTO;
+import ru.iaygi.dto.UserDTO;
 import ru.iaygi.common.EndPoints;
 
 import static io.restassured.http.ContentType.JSON;
@@ -21,7 +21,7 @@ public class RestMethods {
 
     @Step("Получить пользователя '{login}'")
     public RestExecutor getUser(String login) {
-        UsersDTO UsersDTO = new UsersDTO().login(login);
+        UserDTO UsersDTO = new UserDTO().login(login);
         RestExecutor request = new RestExecutor(EndPoints.baseUrl)
                 .contentType(JSON)
                 .body(UsersDTO);
@@ -41,7 +41,7 @@ public class RestMethods {
     }
 
     @Step("Создать пользователя")
-    public RestExecutor createUser(UsersDTO usersDTO) {
+    public RestExecutor createUser(UserDTO usersDTO) {
         RestExecutor request = new RestExecutor(EndPoints.baseUrl)
                 .contentType(JSON)
                 .body(usersDTO);
@@ -52,7 +52,7 @@ public class RestMethods {
 
     @Step("Удалить пользователя '{login}'")
     public RestExecutor deleteUser(String login) {
-        UsersDTO UsersDTO = new UsersDTO().login(login);
+        UserDTO UsersDTO = new UserDTO().login(login);
         RestExecutor request = new RestExecutor(EndPoints.baseUrl)
                 .contentType(JSON)
                 .body(UsersDTO);

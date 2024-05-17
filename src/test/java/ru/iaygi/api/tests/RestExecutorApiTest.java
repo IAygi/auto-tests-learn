@@ -10,7 +10,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import ru.iaygi.api.data.UserData;
 import ru.iaygi.api.service.TestBaseApi;
 import ru.iaygi.dto.UpdateUserDTO;
-import ru.iaygi.dto.UsersDTO;
+import ru.iaygi.dto.UserDTO;
 
 import java.util.List;
 import java.util.stream.Stream;
@@ -32,10 +32,10 @@ import static ru.iaygi.api.service.Conditions.statusCode;
 @Tag("regression")
 @Epic("Users")
 @Feature("Работа с пользователями через API")
-public class ApiTest extends TestBaseApi {
+public class RestExecutorApiTest extends TestBaseApi {
 
-    private UsersDTO users;
-    private List<UsersDTO> allUsers;
+    private UserDTO user;
+    private List<UserDTO> allUsers;
     private static final String latChars = "abcdefghijklmnopqrstuvwxyz";
 
     private static Stream<Arguments> validValues() {
@@ -67,48 +67,12 @@ public class ApiTest extends TestBaseApi {
 
     @BeforeEach
     void prepare() {
-        users = UserData.createUser();
+        user = UserData.createUser();
     }
 
     @AfterEach
     void cleanup() {
-        users = null;
-    }
-
-    /**
-     * Базовая реализация
-     */
-    @Test
-    @Tag("smoke")
-    @DisplayName("Получение списка пользователей")
-    @Description("Проверить корректное получение списка пользователей")
-    void getAllUsersSimple() {
-        given()
-                .log().all()
-                .contentType(ContentType.JSON)
-            .when()
-                .get("/test_api/users.php")
-            .then()
-                .log().all()
-                .assertThat().statusCode(200)
-                .and().body("login", hasItem("admin"));
-    }
-
-    @Test
-    @Tag("smoke")
-    @DisplayName("Создание пользователя")
-    @Description("Проверить корректное создание пользователя")
-    void createUserSimple() {
-        given()
-                .log().all()
-                .contentType(ContentType.JSON)
-                .body(users)
-            .when()
-                .post("/test_api/add_user.php")
-            .then()
-                .log().all()
-                .assertThat().statusCode(201)
-                .and().body("login", containsString(users.login()));
+        user = null;
     }
 
     /**
@@ -120,20 +84,20 @@ public class ApiTest extends TestBaseApi {
     void createUser() {
 
         step("Создать пользователя", () -> {
-            restMethods.createUser(users).shouldHave(statusCode(201));
+            restMethods.createUser(user).shouldHave(statusCode(201));
         });
 
         step("Получить список пользователей", () -> {
-            allUsers = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UsersDTO.class);
+            allUsers = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UserDTO.class);
         });
 
         step("Проверить наличие созданного пользователя в списке пользователей", () -> {
             assertThat(allUsers).extracting("login", "name", "surname")
-                    .contains(tuple(users.login(), users.name(), users.surname()));
+                    .contains(tuple(user.login(), user.name(), user.surname()));
         });
 
         step("Удалить пользователя по login", () -> {
-            restMethods.deleteUser(users.login()).shouldHave(statusCode(204));
+            restMethods.deleteUser(user.login()).shouldHave(statusCode(204));
         });
     }
 
@@ -144,7 +108,7 @@ public class ApiTest extends TestBaseApi {
     void getAllUsers() {
 
         step("Получить список пользователей", () -> {
-            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UsersDTO.class);
+            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UserDTO.class);
 
             step("Проверить наличие созданного пользователя в списке пользователей", () -> {
                 assertThat(res).extracting("login", "name", "surname")
@@ -160,7 +124,7 @@ public class ApiTest extends TestBaseApi {
     void getUser() {
 
         step("Получить пользователя admin", () -> {
-            var res = restMethods.getUser("admin").shouldHave(statusCode(200)).getResponseAs(UsersDTO.class);
+            var res = restMethods.getUser("admin").shouldHave(statusCode(200)).getResponseAs(UserDTO.class);
             assertAll(
                     () -> {
                         assertThat(res.login()).isEqualTo("admin");
@@ -193,25 +157,25 @@ public class ApiTest extends TestBaseApi {
         String name = userRandom().name();
 
         step("Создать пользователя", () -> {
-            restMethods.createUser(users);
+            restMethods.createUser(user);
         });
 
         step("Обновить имя пользователя по login", () -> {
             UpdateUserDTO updateUserDTO = new UpdateUserDTO()
-                    .login(users.login())
+                    .login(user.login())
                     .column("name")
                     .value(name);
-            restMethods.updateUser(updateUserDTO).shouldHave(statusCode(200)).getResponseAs(UsersDTO.class);
+            restMethods.updateUser(updateUserDTO).shouldHave(statusCode(200)).getResponseAs(UserDTO.class);
         });
 
         step("Проверить наличие изменённого пользователя в списке пользователей", () -> {
-            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UsersDTO.class);
+            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UserDTO.class);
             assertThat(res).extracting("login", "name")
-                    .contains(tuple(users.login(), name));
+                    .contains(tuple(user.login(), name));
         });
 
         step("Удалить пользователя по login", () -> {
-            restMethods.deleteUser(users.login()).shouldHave(statusCode(204));
+            restMethods.deleteUser(user.login()).shouldHave(statusCode(204));
         });
     }
 
@@ -222,25 +186,25 @@ public class ApiTest extends TestBaseApi {
         String surname = userRandom().surname();
 
         step("Создать пользователя", () -> {
-            restMethods.createUser(users);
+            restMethods.createUser(user);
         });
 
         step("Обновить фамилию пользователя по login", () -> {
             UpdateUserDTO updateUserDTO = new UpdateUserDTO()
-                    .login(users.login())
+                    .login(user.login())
                     .column("surname")
                     .value(surname);
-            restMethods.updateUser(updateUserDTO).shouldHave(statusCode(200)).getResponseAs(UsersDTO.class);
+            restMethods.updateUser(updateUserDTO).shouldHave(statusCode(200)).getResponseAs(UserDTO.class);
         });
 
         step("Проверить наличие изменённого пользователя в списке пользователей", () -> {
-            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UsersDTO.class);
+            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UserDTO.class);
             assertThat(res).extracting("login", "surname")
-                    .contains(tuple(users.login(), surname));
+                    .contains(tuple(user.login(), surname));
         });
 
         step("Удалить пользователя по login", () -> {
-            restMethods.deleteUser(users.login()).shouldHave(statusCode(204));
+            restMethods.deleteUser(user.login()).shouldHave(statusCode(204));
         });
     }
 
@@ -250,20 +214,20 @@ public class ApiTest extends TestBaseApi {
     void deleteNotRealUserByLogin() {
 
         step("Создать пользователя", () -> {
-            restMethods.createUser(users);
-            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UsersDTO.class);
+            restMethods.createUser(user);
+            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UserDTO.class);
             assertThat(res).extracting("login", "name", "surname")
-                    .contains(tuple(users.login(), users.name(), users.surname()));
+                    .contains(tuple(user.login(), user.name(), user.surname()));
         });
 
         step("Удалить пользователя по login", () -> {
-            restMethods.deleteUser(users.login()).shouldHave(statusCode(204));
+            restMethods.deleteUser(user.login()).shouldHave(statusCode(204));
         });
 
         step("Проверить отсутствие удалённого пользователя в списке пользователей", () -> {
-            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UsersDTO.class);
+            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UserDTO.class);
             assertThat(res).extracting("login", "name")
-                    .doesNotContain(tuple(users.login(), users.name()));
+                    .doesNotContain(tuple(user.login(), user.name()));
         });
     }
 
@@ -288,17 +252,17 @@ public class ApiTest extends TestBaseApi {
     void createUserWithValidLogin(String key, String value) {
 
         step("Создать пользователя", () -> {
-            restMethods.createUser(users.login(value)).shouldHave(statusCode(201));
+            restMethods.createUser(user.login(value)).shouldHave(statusCode(201));
         });
 
         step("Проверить наличие созданного пользователя в списке пользователей", () -> {
-            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UsersDTO.class);
+            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UserDTO.class);
             assertThat(res).extracting("login", "name", "surname")
-                    .contains(tuple(users.login(), users.name(), users.surname()));
+                    .contains(tuple(user.login(), user.name(), user.surname()));
         });
 
         step("Удалить пользователя по login", () -> {
-            restMethods.deleteUser(users.login()).shouldHave(statusCode(204));
+            restMethods.deleteUser(user.login()).shouldHave(statusCode(204));
         });
     }
 
@@ -309,13 +273,13 @@ public class ApiTest extends TestBaseApi {
     void createUserWithInvalidLogin(String key, String value) {
 
         step("Создать пользователя", () -> {
-            restMethods.createUser(users.login(value)).shouldHave(statusCode(400));
+            restMethods.createUser(user.login(value)).shouldHave(statusCode(400));
         });
 
         step("Проверить отсутствие пользователя в списке пользователей", () -> {
-            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UsersDTO.class);
+            var res = restMethods.getAllUsers().shouldHave(statusCode(200)).getResponseAsList(UserDTO.class);
             assertThat(res).extracting("login", "name")
-                    .doesNotContain(tuple(users.login(), value));
+                    .doesNotContain(tuple(user.login(), value));
         });
     }
 }

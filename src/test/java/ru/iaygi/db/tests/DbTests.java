@@ -8,7 +8,7 @@ import org.junit.jupiter.api.*;
 import ru.iaygi.db.data.Sql;
 import ru.iaygi.db.objects.DbMethods;
 import ru.iaygi.db.service.DbConnect;
-import ru.iaygi.dto.UsersDTO;
+import ru.iaygi.dto.UserDTO;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -28,7 +28,7 @@ public class DbTests extends DbConnect {
     private Sql sql = new Sql();
     private ResultSet resultSet;
     private DbMethods dbMethods = new DbMethods();
-    private List<UsersDTO> list;
+    private List<UserDTO> list;
 
     @BeforeEach
     void prepare() {

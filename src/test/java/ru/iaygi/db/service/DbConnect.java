@@ -3,7 +3,7 @@ package ru.iaygi.db.service;
 import io.qameta.allure.Step;
 import lombok.extern.slf4j.Slf4j;
 import ru.iaygi.db.data.DbData;
-import ru.iaygi.dto.UsersDTO;
+import ru.iaygi.dto.UserDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -46,12 +46,12 @@ public class DbConnect {
     @Step("SQL request")
     public List getAllUsers(ResultSet resultSet) {
         log.debug("GET all users");
-        List<UsersDTO> listObjects;
+        List<UserDTO> listObjects;
 
         try {
             listObjects = new ArrayList<>();
             while (resultSet.next()) {
-                UsersDTO users = new UsersDTO();
+                UserDTO users = new UserDTO();
                 users.id(resultSet.getInt("id"));
                 users.login(resultSet.getString("login"));
                 users.name(resultSet.getString("name"));
@@ -70,12 +70,12 @@ public class DbConnect {
     @Step("SQL request")
     public List createUser(ResultSet resultSet) {
         log.debug("Create user");
-        List<UsersDTO> listObjects;
+        List<UserDTO> listObjects;
 
         try {
             listObjects = new ArrayList<>();
             while (resultSet.next()) {
-                UsersDTO users = new UsersDTO();
+                UserDTO users = new UserDTO();
                 users.id(resultSet.getInt("id"));
                 users.login(resultSet.getString("login"));
                 users.name(resultSet.getString("name"));

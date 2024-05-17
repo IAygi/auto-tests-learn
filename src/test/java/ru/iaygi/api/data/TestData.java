@@ -7,9 +7,7 @@ public class TestData {
     private String last_name;
     private String avatar;
 
-    public TestData() {
-
-    }
+    public TestData() {}
 
     public TestData(Integer id, String email, String first_name, String last_name, String avatar) {
         this.id = id;

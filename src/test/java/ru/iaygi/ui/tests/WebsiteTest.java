@@ -48,6 +48,9 @@ public class WebsiteTest extends TestBaseUi {
         closeDriver(USE_SELENOID);
     }
 
+    /**
+     * Page Object
+     */
     @Test
     @Tag("smoke")
     @DisplayName("Проверка главной страницы")
