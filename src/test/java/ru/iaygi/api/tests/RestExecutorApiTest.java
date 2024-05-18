@@ -1,7 +1,6 @@
 package ru.iaygi.api.tests;
 
 import io.qameta.allure.*;
-import io.restassured.http.ContentType;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -17,11 +16,8 @@ import java.util.stream.Stream;
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
-import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.hasItem;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static ru.iaygi.api.data.UserData.userRandom;
 import static ru.iaygi.api.service.Conditions.statusCode;

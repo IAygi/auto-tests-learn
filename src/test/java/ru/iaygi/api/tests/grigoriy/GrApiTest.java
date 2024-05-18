@@ -31,12 +31,9 @@ import static io.qameta.allure.SeverityLevel.NORMAL;
 @Feature("")
 public class GrApiTest {
 
-    public static RestMethods restMethods;
-
     @BeforeAll
     public static void setUp() {
         RestAssured.baseURI = "https://reqres.in";
-        restMethods = new RestMethods();
     }
 
     @BeforeEach
