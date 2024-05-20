@@ -9,6 +9,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ru.iaygi.db.data.DbData.*;
+
 @Slf4j
 public class DbConnect {
 
@@ -20,7 +22,7 @@ public class DbConnect {
     public ResultSet getRequest(String sqlRequest) {
         log.info("DB connection with sql");
         try {
-            connection = DriverManager.getConnection(DbData.psqlUrl, DbData.dbUser, DbData.dbPassword);
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
             log.info("Successfully connected to the database");
         } catch (SQLException e) {
             throw new RuntimeException(e);

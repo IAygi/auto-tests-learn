@@ -1,7 +1,7 @@
 package ru.iaygi.ui.data;
 
 public class TestData {
-    public static final String selenoid = "http://---------:4444/wd/hub";
+    public static final String SELENOID = "http://---------:4444/wd/hub";
     public static boolean enableVNC = setVnc();
     public static boolean enableVideo = setVideo();
 

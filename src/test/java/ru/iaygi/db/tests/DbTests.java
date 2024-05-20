@@ -17,6 +17,7 @@ import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
+import static ru.iaygi.db.data.Sql.GET_CUSTOMERS;
 
 @Severity(CRITICAL)
 @Tag("db_test")
@@ -25,7 +26,6 @@ import static org.assertj.core.groups.Tuple.tuple;
 @Feature("Работа с пользователями через БД")
 public class DbTests extends DbConnect {
 
-    private Sql sql = new Sql();
     private ResultSet resultSet;
     private DbMethods dbMethods = new DbMethods();
     private List<UserDTO> list;
@@ -50,7 +50,7 @@ public class DbTests extends DbConnect {
         String email = "petrov@mail.ru";
 
         step("Сделать SQL запрос на получение покупателей", () -> {
-            resultSet = getRequest(sql.getCustomers);
+            resultSet = getRequest(GET_CUSTOMERS);
         });
 
         step("Получить коллекцию покупателей", () -> {
