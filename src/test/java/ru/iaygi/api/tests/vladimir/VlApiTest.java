@@ -2,13 +2,15 @@ package ru.iaygi.api.tests.vladimir;
 
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
+import org.joda.time.LocalDate;
 import org.junit.jupiter.api.*;
+import ru.iaygi.api.tests.vladimir.dto.ResourceDTO;
+import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPutDTO;
+
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.iaygi.api.service.Conditions.statusCode;
 
 
@@ -55,34 +57,34 @@ public class VlApiTest {
     void getResourceId() {
 
         step("Получить данные", () -> {
-            var res = RestMethod.getResourceId().shouldHave(statusCode(200)).getResponseAs("data",ResourceDTO.class);
+            var res = RestMethod.getResourceId().shouldHave(statusCode(200))
+                    .getResponseAs("data", ResourceDTO.class);
 
             step("Проверить данные", () -> {
                 assertThat(res).extracting("id", "name", "year", "color", "pantone_value")
                         .contains(2,"fuchsia rose" , 2001, "#C74375", "17-2031");
             });
+        });
+    }
 
-        /* Первоначальная реализация второго шага
+    @Test
+    @DisplayName("Обновление пользователя")
+    @Description("Обновить пользователя методом PUT")
+    void updateUserViaPut(){
 
-         step("Проверить данные", () -> {
-                assertAll(
-                        () -> {
-                            assertThat(res.id()).isEqualTo(2);
-                        },
-                        () -> {
-                            assertThat(res.name()).isEqualTo("fuchsia rose");
-                        },
-                        () -> {
-                            assertThat(res.year()).isEqualTo(2001);
-                        },
-                         () -> {
-                            assertThat(res.color()).isEqualTo("#C74375");
-                        },
-                        () -> {
-                            assertThat(res.pantone_value()).isEqualTo("17-2031");
-                        }
-                );
-            });*/
+        step("Обновить пользователя", () -> {
+            UpdateUserViaPutDTO updateUserViaPutDTO = new UpdateUserViaPutDTO()
+                    .name("morpheus")
+                    .job("zion resident");
+            var res = RestMethod.updateUserViaPut(updateUserViaPutDTO).shouldHave(statusCode(200))
+                    .getResponseAs(UpdateUserViaPutDTO.class);
+
+            step("Проверить обновленные данные и дату обновления", () -> {
+                LocalDate date = new LocalDate();
+                assertThat(res).extracting("name","job")
+                        .contains("morpheus","zion resident");
+                assertThat(res.updatedAt()).contains(date.toString());
+            });
         });
     }
 }

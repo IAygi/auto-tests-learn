@@ -1,4 +1,4 @@
-package ru.iaygi.api.tests.vladimir;
+package ru.iaygi.api.tests.vladimir.data;
 
 public class ResourceData {
     private Integer id;

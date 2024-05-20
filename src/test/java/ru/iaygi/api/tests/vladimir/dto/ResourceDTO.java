@@ -1,4 +1,4 @@
-package ru.iaygi.api.tests.vladimir;
+package ru.iaygi.api.tests.vladimir.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
