@@ -4,7 +4,7 @@ import io.qameta.allure.Step;
 import io.restassured.RestAssured;
 import ru.iaygi.api.rest.RestMethods;
 
-import static ru.iaygi.common.EndPoints.baseUrl;
+import static ru.iaygi.common.EndPoints.BASE_URL;
 
 public class TestBaseApi {
 
@@ -12,7 +12,7 @@ public class TestBaseApi {
 
     @Step("Предварительная настройка")
     public static void init() {
-        RestAssured.baseURI = baseUrl;
+        RestAssured.baseURI = BASE_URL;
         restMethods = new RestMethods();
     }
 }

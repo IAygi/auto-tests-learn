@@ -15,7 +15,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static ru.iaygi.common.EndPoints.baseUrl;
+import static ru.iaygi.common.EndPoints.BASE_URL;
+import static ru.iaygi.ui.data.TestData.SELENOID;
 
 public class TestBaseUi {
     public static ChromeOptions options;
@@ -24,7 +25,7 @@ public class TestBaseUi {
     @Step("Настройка конфигурации браузера")
     public static void initDriver(boolean useSelenoid) {
 
-        Configuration.baseUrl = baseUrl;
+        Configuration.baseUrl = BASE_URL;
         if (!useSelenoid) {
             Configuration.holdBrowserOpen = true;
         }
@@ -54,7 +55,7 @@ public class TestBaseUi {
 
         if (useSelenoid) {
             try {
-                driver = new RemoteWebDriver(new URL(TestData.selenoid), options);
+                driver = new RemoteWebDriver(new URL(SELENOID), options);
             } catch (MalformedURLException e) {
                 throw new RuntimeException(e);
             }

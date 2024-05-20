@@ -32,15 +32,15 @@ public class RestExecutorApiTest extends TestBaseApi {
 
     private UserDTO user;
     private List<UserDTO> allUsers;
-    private static final String latChars = "abcdefghijklmnopqrstuvwxyz";
+    private static final String LAT_CHARS = "abcdefghijklmnopqrstuvwxyz";
 
     private static Stream<Arguments> validValues() {
         return Stream.of(
-                Arguments.of("3 символа", RandomStringUtils.random(3, latChars)),
-                Arguments.of("4 символа", RandomStringUtils.random(4, latChars)),
-                Arguments.of("99 символов", RandomStringUtils.random(99, latChars)),
-                Arguments.of("100 символов", RandomStringUtils.random(100, latChars)),
-                Arguments.of("50 символов", RandomStringUtils.random(50, latChars))
+                Arguments.of("3 символа", RandomStringUtils.random(3, LAT_CHARS)),
+                Arguments.of("4 символа", RandomStringUtils.random(4, LAT_CHARS)),
+                Arguments.of("99 символов", RandomStringUtils.random(99, LAT_CHARS)),
+                Arguments.of("100 символов", RandomStringUtils.random(100, LAT_CHARS)),
+                Arguments.of("50 символов", RandomStringUtils.random(50, LAT_CHARS))
         );
     }
 
@@ -48,11 +48,11 @@ public class RestExecutorApiTest extends TestBaseApi {
         return Stream.of(
                 Arguments.of("пустой", ""),
                 Arguments.of("пробел", " "),
-                Arguments.of("1 символ", RandomStringUtils.random(1, latChars)),
-                Arguments.of("2 символа", RandomStringUtils.random(2, latChars)),
-                Arguments.of("101 символ", RandomStringUtils.random(101, latChars)),
-                Arguments.of("102 символ", RandomStringUtils.random(102, latChars)),
-                Arguments.of("200 символов", RandomStringUtils.random(200, latChars))
+                Arguments.of("1 символ", RandomStringUtils.random(1, LAT_CHARS)),
+                Arguments.of("2 символа", RandomStringUtils.random(2, LAT_CHARS)),
+                Arguments.of("101 символ", RandomStringUtils.random(101, LAT_CHARS)),
+                Arguments.of("102 символ", RandomStringUtils.random(102, LAT_CHARS)),
+                Arguments.of("200 символов", RandomStringUtils.random(200, LAT_CHARS))
         );
     }
 

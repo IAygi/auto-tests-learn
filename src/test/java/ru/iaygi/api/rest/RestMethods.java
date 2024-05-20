@@ -4,17 +4,17 @@ import io.qameta.allure.Step;
 import ru.iaygi.api.service.RestExecutor;
 import ru.iaygi.dto.UpdateUserDTO;
 import ru.iaygi.dto.UserDTO;
-import ru.iaygi.common.EndPoints;
 
 import static io.restassured.http.ContentType.JSON;
+import static ru.iaygi.common.EndPoints.*;
 
 public class RestMethods {
 
     @Step("Получить всех пользователей")
     public RestExecutor getAllUsers() {
-        RestExecutor request = new RestExecutor(EndPoints.baseUrl)
+        RestExecutor request = new RestExecutor(BASE_URL)
                 .contentType(JSON);
-        request.get(EndPoints.getAllUsers);
+        request.get(GET_ALL_USERS);
 
         return request;
     }
@@ -22,30 +22,30 @@ public class RestMethods {
     @Step("Получить пользователя '{login}'")
     public RestExecutor getUser(String login) {
         UserDTO UsersDTO = new UserDTO().login(login);
-        RestExecutor request = new RestExecutor(EndPoints.baseUrl)
+        RestExecutor request = new RestExecutor(BASE_URL)
                 .contentType(JSON)
                 .body(UsersDTO);
-        request.post(EndPoints.getUser);
+        request.post(GET_USER);
 
         return request;
     }
 
     @Step("Обновить пользователя")
     public RestExecutor updateUser(UpdateUserDTO updateUserDTO) {
-        RestExecutor request = new RestExecutor(EndPoints.baseUrl)
+        RestExecutor request = new RestExecutor(BASE_URL)
                 .contentType(JSON)
                 .body(updateUserDTO);
-        request.put(EndPoints.updateUser);
+        request.put(UPDATE_USER);
 
         return request;
     }
 
     @Step("Создать пользователя")
     public RestExecutor createUser(UserDTO usersDTO) {
-        RestExecutor request = new RestExecutor(EndPoints.baseUrl)
+        RestExecutor request = new RestExecutor(BASE_URL)
                 .contentType(JSON)
                 .body(usersDTO);
-        request.post(EndPoints.createUser);
+        request.post(CREATE_USER);
 
         return request;
     }
@@ -53,10 +53,10 @@ public class RestMethods {
     @Step("Удалить пользователя '{login}'")
     public RestExecutor deleteUser(String login) {
         UserDTO UsersDTO = new UserDTO().login(login);
-        RestExecutor request = new RestExecutor(EndPoints.baseUrl)
+        RestExecutor request = new RestExecutor(BASE_URL)
                 .contentType(JSON)
                 .body(UsersDTO);
-        request.delete(EndPoints.deleteUser);
+        request.delete(DELETE_USER);
 
         return request;
     }
