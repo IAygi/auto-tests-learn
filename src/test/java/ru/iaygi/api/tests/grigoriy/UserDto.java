@@ -18,7 +18,6 @@ public class UserDto {
         private String name;
         private Integer year;
         private String color;
-        @JsonProperty("pantone-value")
-        private String pantoneValue;
+        private String pantone_value;
     }
 

@@ -61,7 +61,7 @@ public class GrApiTest extends Methods {
                     ()-> assertThat(user.name()).isEqualTo("fuchsia rose"),
                     ()-> assertThat(user.year()).isEqualTo(2001),
                     ()-> assertThat(user.color()).isEqualTo("#C74375"),
-                    ()-> assertThat(user.pantoneValue()).isEqualTo("17-2031")
+                    ()-> assertThat(user.pantone_value()).isEqualTo("17-2031")
             );
         });
     }
