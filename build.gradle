@@ -98,6 +98,12 @@ task api_tests(type: Test) {
     }
 }
 
+task only_one_tests(type: Test) {
+    useJUnitPlatform {
+        includeTags("only_one")
+    }
+}
+
 test {
     useJUnitPlatform()
 }
