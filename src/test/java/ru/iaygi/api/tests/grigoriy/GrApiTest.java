@@ -3,10 +3,12 @@ package ru.iaygi.api.tests.grigoriy;
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.*;
-import ru.iaygi.api.rest.RestMethods;
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static ru.iaygi.api.service.Conditions.statusCode;
 
 /*
   В качестве домашнего задания, предлагаю написать тест на эндпоинт:
@@ -29,7 +31,8 @@ import static io.qameta.allure.SeverityLevel.NORMAL;
 @Tag("api_test")
 @Epic("")
 @Feature("")
-public class GrApiTest {
+public class GrApiTest extends Methods {
+    Methods methods = new Methods();
 
     @BeforeAll
     public static void setUp() {
@@ -47,12 +50,19 @@ public class GrApiTest {
     }
 
     @Test
-    @DisplayName("")
-    @Description("")
-    void createUser() {
+    @DisplayName("Получение пользователя по id")
+    @Description("Проверить получение пользователя по id")
+    void getUserId() {
 
-        step("", () -> {
-
+        step("Получить пользователя по id", () -> {
+            var user =methods.getUser().shouldHave(statusCode(200)).getResponseAs("data",UserDto.class);
+            assertAll(
+                    ()-> assertThat(user.id()).isEqualTo(2),
+                    ()-> assertThat(user.name()).isEqualTo("fuchsia rose"),
+                    ()-> assertThat(user.year()).isEqualTo(2001),
+                    ()-> assertThat(user.color()).isEqualTo("#C74375"),
+                    ()-> assertThat(user.pantoneValue()).isEqualTo("17-2031")
+            );
         });
     }
 }
