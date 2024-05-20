@@ -1,8 +1,9 @@
-package ru.iaygi.api.tests.vladimir;
+package ru.iaygi.api.tests.vladimir.tests;
 
 import io.qameta.allure.Owner;
 import org.junit.jupiter.api.Test;
 import ru.iaygi.api.service.Specification;
+import ru.iaygi.api.tests.vladimir.data.ResourceData;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
