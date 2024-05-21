@@ -1,7 +1,6 @@
 package ru.iaygi.api.tests.grigoriy;
 
 import io.qameta.allure.Step;
-import io.restassured.http.ContentType;
 import ru.iaygi.api.service.RestExecutor;
 
 import static io.restassured.http.ContentType.JSON;
@@ -16,12 +15,13 @@ public class Methods {
         return req;
     }
 
-    @Step ("Обновить пользователя")
-    public RestExecutor updateUser (UpdateUserDtoReq updateUserDtoReq) {
+
+    @Step ("Создать пользователя")
+    public RestExecutor createUser (CreateUserDto createUserDto) {
         RestExecutor req = new RestExecutor(BASE_URL)
                 .contentType(JSON)
-                .body(updateUserDtoReq);
-        req.put(UPDATE_USER);
+                .body(createUserDto);
+        req.post(CREATE_USER);
         return req;
     }
 }

@@ -9,17 +9,18 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDateTime;
-
 @Data
 @Accessors(fluent = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UpdateUserDtoResponse {
-    private String name;
-    private String job;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    @JsonDeserialize(using = DateDeserializer.class)
-    private LocalDateTime updatedAt;
 
-}
+public class CreateUserDto {
+        private String id;
+        private String name;
+        private String job;
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        @JsonDeserialize(using = DateDeserializer.class)
+        private LocalDateTime updatedAt;
+
+    }

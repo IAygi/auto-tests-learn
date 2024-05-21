@@ -37,7 +37,6 @@ public class GrApiTest extends Methods {
 
 
 
-
     @BeforeAll
     public static void setUp() {
         RestAssured.baseURI = "https://reqres.in";
@@ -71,19 +70,16 @@ public class GrApiTest extends Methods {
     }
 
     @Test
-    @DisplayName("Обновление информации о пользователе")
-    @Description("Проверить метод PUT")
-    void updateUser () {
+    @DisplayName("Создание пользователя")
+    @Description("Проверить создание пользователя")
+    void createUser () {
 
 
-        step("Обновить информацию о пользователе по ID", ()->{
-                    UpdateUserDtoReq updateUserDtoReq = new UpdateUserDtoReq()
-                            .job("zion resident")
-                            .name("morpheus");
-            methods.updateUser(updateUserDtoReq).shouldHave(statusCode(200)).getResponseAs(UpdateUserDtoResponse.class);
-                assertThat(updateUserDtoReq).isNotNull().extracting("name","job")
-                                .contains("morpheus","zion resident");
-        }
-                );
+        step("Создать пользователя", ()->{
+            CreateUserDto createUserDto = new CreateUserDto()
+                    .name("morpheus")
+                    .job("leader");
+            var res = methods.createUser(createUserDto).shouldHave(statusCode(201)).getResponseAs(CreateUserDto.class);
+                });
     }
 }
