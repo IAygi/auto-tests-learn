@@ -2,7 +2,9 @@ package ru.iaygi.api.tests.grigoriy;
 
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
+import org.joda.time.LocalDate;
 import org.junit.jupiter.api.*;
+import ru.iaygi.api.tests.vladimir.RestMethod;
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
@@ -75,11 +77,13 @@ public class GrApiTest extends Methods {
     void createUser () {
 
 
-        step("Создать пользователя", ()->{
+        step("Создать пользователя", () -> {
             CreateUserDto createUserDto = new CreateUserDto()
                     .name("morpheus")
                     .job("leader");
             var res = methods.createUser(createUserDto).shouldHave(statusCode(201)).getResponseAs(CreateUserDto.class);
                 });
     }
+
+
 }

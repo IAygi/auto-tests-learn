@@ -21,6 +21,6 @@ public class CreateUserDto {
         private String job;
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         @JsonDeserialize(using = DateDeserializer.class)
-        private LocalDateTime updatedAt;
+        private String updatedAt;
 
     }
