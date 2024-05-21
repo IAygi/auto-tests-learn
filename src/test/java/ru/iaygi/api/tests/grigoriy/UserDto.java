@@ -13,7 +13,6 @@ import lombok.experimental.Accessors;
 @JsonIgnoreProperties(ignoreUnknown = true)
 
 public class UserDto {
-
         private Integer id;
         private String name;
         private Integer year;

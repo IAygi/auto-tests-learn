@@ -6,6 +6,7 @@ import org.junit.jupiter.api.*;
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
+import static io.qameta.allure.internal.shadowed.jackson.databind.util.ClassUtil.name;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static ru.iaygi.api.service.Conditions.statusCode;
@@ -33,6 +34,9 @@ import static ru.iaygi.api.service.Conditions.statusCode;
 @Feature("")
 public class GrApiTest extends Methods {
     Methods methods = new Methods();
+
+
+
 
     @BeforeAll
     public static void setUp() {
@@ -64,5 +68,22 @@ public class GrApiTest extends Methods {
                     ()-> assertThat(user.pantone_value()).isEqualTo("17-2031")
             );
         });
+    }
+
+    @Test
+    @DisplayName("Обновление информации о пользователе")
+    @Description("Проверить метод PUT")
+    void updateUser () {
+
+
+        step("Обновить информацию о пользователе по ID", ()->{
+                    UpdateUserDtoReq updateUserDtoReq = new UpdateUserDtoReq()
+                            .job("zion resident")
+                            .name("morpheus");
+            methods.updateUser(updateUserDtoReq).shouldHave(statusCode(200)).getResponseAs(UpdateUserDtoResponse.class);
+                assertThat(updateUserDtoReq).isNotNull().extracting("name","job")
+                                .contains("morpheus","zion resident");
+        }
+                );
     }
 }
