@@ -35,7 +35,7 @@ import static ru.iaygi.api.service.Conditions.statusCode;
 @Epic("")
 @Feature("")
 public class GrApiTest extends Methods {
-    Methods methods = new Methods();
+ Methods methods = new Methods();
 
 
 
@@ -78,11 +78,12 @@ public class GrApiTest extends Methods {
 
 
         step("Создать пользователя", () -> {
-//            CreateUserDto createUserDto = new CreateUserDto()
-                    POJO pojo = new POJO()
+            CreateUserDto createUserDto = new CreateUserDto()
                     .name("morpheus")
                     .job("leader");
-           methods.createUser(pojo);
+            var result = methods.createUser(createUserDto).shouldHave(statusCode(201)).getResponseAs(CreateUserDto.class);
+            assertThat(result).extracting("name","job","createdAt")
+                    .contains("morpheus","leader");
                 });
     }
 

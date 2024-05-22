@@ -1,10 +1,10 @@
 package ru.iaygi.api.tests.grigoriy;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import io.qameta.allure.internal.shadowed.jackson.annotation.JsonAutoDetect;
-import io.qameta.allure.internal.shadowed.jackson.annotation.JsonFormat;
-import io.qameta.allure.internal.shadowed.jackson.annotation.JsonIgnoreProperties;
-import io.qameta.allure.internal.shadowed.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,8 +18,7 @@ public class CreateUserDto {
         private String id;
         private String name;
         private String job;
-        /*@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
         @JsonDeserialize(using = DateDeserializer.class)
-        private String updatedAt;
-*/
+        private LocalDateTime createdAt;
     }
