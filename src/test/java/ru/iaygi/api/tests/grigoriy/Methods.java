@@ -17,10 +17,10 @@ public class Methods {
 
 
     @Step ("Создать пользователя")
-    public RestExecutor createUser (CreateUserDto createUserDto) {
+    public RestExecutor createUser (POJO pojo) {
         RestExecutor req = new RestExecutor(BASE_URL)
                 .contentType(JSON)
-                .body(createUserDto);
+                .body(pojo);
         req.post(CREATE_USER);
         return req;
     }

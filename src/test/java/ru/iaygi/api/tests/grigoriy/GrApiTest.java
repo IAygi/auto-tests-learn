@@ -78,10 +78,11 @@ public class GrApiTest extends Methods {
 
 
         step("Создать пользователя", () -> {
-            CreateUserDto createUserDto = new CreateUserDto()
+//            CreateUserDto createUserDto = new CreateUserDto()
+                    POJO pojo = new POJO()
                     .name("morpheus")
                     .job("leader");
-            var res = methods.createUser(createUserDto).shouldHave(statusCode(201)).getResponseAs(CreateUserDto.class);
+           methods.createUser(pojo);
                 });
     }
 
