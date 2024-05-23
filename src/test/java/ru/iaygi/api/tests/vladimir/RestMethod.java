@@ -16,12 +16,22 @@ public class RestMethod {
 
         return request;
     }
+
     @Step("Обновить пользователя методом PUT")
     public static RestExecutor updateUserViaPut(UpdateUserViaPutDTO updateUserViaPutDTO) {
         RestExecutor request = new RestExecutor(EndPoint.baseUrl)
                 .contentType(JSON)
                 .body(updateUserViaPutDTO);
         request.put(EndPoint.updateUserViaPut);
+
+        return request;
+    }
+
+    @Step("Получить пользователя по id")
+    public static RestExecutor getUserId(String id) {
+        RestExecutor request = new RestExecutor(EndPoint.baseUrl)
+                .contentType(JSON);
+        request.get(EndPoint.getUserId + id);
 
         return request;
     }
