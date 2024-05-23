@@ -16,13 +16,4 @@ public class UserData extends FakeData {
                 .city(cityName())
                 .age(String.valueOf(number()));
     }
-
-    public static UserDTO createUser() {
-        return new UserDTO()
-                .login(userRandom().login())
-                .name(userRandom().name())
-                .surname(userRandom().surname())
-                .city(userRandom().city())
-                .age(userRandom().age());
-    }
 }

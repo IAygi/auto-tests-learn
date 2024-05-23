@@ -29,7 +29,7 @@ public class BaseApiTest extends TestBaseApi {
 
     @BeforeEach
     void prepare() {
-        user = UserData.createUser();
+        user = UserData.userRandom();
     }
 
     @AfterEach
