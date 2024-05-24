@@ -4,14 +4,21 @@ import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import org.joda.time.LocalDate;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import ru.iaygi.api.tests.vladimir.dto.ResourceDTO;
 import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPutDTO;
+import ru.iaygi.api.tests.vladimir.dto.UserDTO;
 
+import java.util.stream.Stream;
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
+import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.iaygi.api.service.Conditions.statusCode;
+import static ru.iaygi.api.tests.vladimir.data.UserData.users;
 
 
 /*
@@ -37,6 +44,17 @@ import static ru.iaygi.api.service.Conditions.statusCode;
 @Feature("Работа с данными через API")
 public class VlApiTest {
 
+    private static Stream<Arguments> idValues() {
+        return Stream.of(
+                Arguments.of("1", users.get(1)),
+                Arguments.of("2", users.get(2)),
+                Arguments.of("3", users.get(3)),
+                Arguments.of("4", users.get(4)),
+                Arguments.of("5", users.get(5)),
+                Arguments.of("6", users.get(6))
+        );
+    }
+
     @BeforeAll
     public static void setUp() {
         RestAssured.baseURI = "https://reqres.in";
@@ -47,7 +65,7 @@ public class VlApiTest {
     }
 
     @AfterEach
-     void cleanup() {
+    void cleanup() {
 
     }
 
@@ -62,7 +80,7 @@ public class VlApiTest {
 
             step("Проверить данные", () -> {
                 assertThat(res).extracting("id", "name", "year", "color", "pantone_value")
-                        .contains(2,"fuchsia rose" , 2001, "#C74375", "17-2031");
+                        .contains(2, "fuchsia rose", 2001, "#C74375", "17-2031");
             });
         });
     }
@@ -70,7 +88,7 @@ public class VlApiTest {
     @Test
     @DisplayName("Обновление пользователя")
     @Description("Обновить пользователя методом PUT")
-    void updateUserViaPut(){
+    void updateUserViaPut() {
 
         step("Обновить пользователя", () -> {
             UpdateUserViaPutDTO updateUserViaPutDTO = new UpdateUserViaPutDTO()
@@ -81,10 +99,27 @@ public class VlApiTest {
 
             step("Проверить обновленные данные и дату обновления", () -> {
                 LocalDate date = new LocalDate();
-                assertThat(res).extracting("name","job")
-                        .contains("morpheus","zion resident");
+                assertThat(res).extracting("name", "job")
+                        .contains("morpheus", "zion resident");
                 assertThat(res.updatedAt()).contains(date.toString());
             });
+        });
+    }
+
+    @ParameterizedTest(name = "Получение пользователя по id: {0}")
+    @MethodSource("idValues")
+    @DisplayName("ParameterizedTest: ")
+    @Description("Проверить получение пользователя по id")
+    void getUserId(String userId, String userName) {
+
+        step("Получить пользователя по id", () -> {
+            RestMethod.getUserId(userId).shouldHave(statusCode(200));
+        });
+
+        step("Проверить id и first_name у полученного пользователя", () -> {
+            var result = RestMethod.getUserId(userId).getResponseAs("data", UserDTO.class);
+            assertThat(result).extracting("id", "first_name")
+                    .contains(parseInt(userId), userName);
         });
     }
 }
