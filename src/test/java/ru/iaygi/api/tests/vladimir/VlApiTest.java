@@ -7,8 +7,10 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import ru.iaygi.api.tests.vladimir.data.UserData;
 import ru.iaygi.api.tests.vladimir.dto.ResourceDTO;
 import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPutDTO;
+import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPatchDTO;
 import ru.iaygi.api.tests.vladimir.dto.UserDTO;
 
 import java.util.stream.Stream;
@@ -19,7 +21,6 @@ import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.iaygi.api.service.Conditions.statusCode;
 import static ru.iaygi.api.tests.vladimir.data.UserData.users;
-
 
 /*
   В качестве домашнего задания, предлагаю написать тест на эндпоинт:
@@ -44,6 +45,9 @@ import static ru.iaygi.api.tests.vladimir.data.UserData.users;
 @Feature("Работа с данными через API")
 public class VlApiTest {
 
+    private UpdateUserViaPatchDTO user;
+    private LocalDate date;
+
     private static Stream<Arguments> idValues() {
         return Stream.of(
                 Arguments.of("1", users.get(1)),
@@ -62,6 +66,8 @@ public class VlApiTest {
 
     @BeforeEach
     void prepare() {
+        user = UserData.userRandom();
+        date = new LocalDate();
     }
 
     @AfterEach
@@ -98,7 +104,6 @@ public class VlApiTest {
                     .getResponseAs(UpdateUserViaPutDTO.class);
 
             step("Проверить обновленные данные и дату обновления", () -> {
-                LocalDate date = new LocalDate();
                 assertThat(res).extracting("name", "job")
                         .contains("morpheus", "zion resident");
                 assertThat(res.updatedAt()).contains(date.toString());
@@ -120,6 +125,29 @@ public class VlApiTest {
             var result = RestMethod.getUserId(userId).getResponseAs("data", UserDTO.class);
             assertThat(result).extracting("id", "first_name")
                     .contains(parseInt(userId), userName);
+        });
+    }
+
+    @Test
+    @DisplayName("Обновление пользователя с использованием javafaker")
+    @Description("Обновить пользователя методом PATCH")
+    void updateUserViaPatch() {
+
+        UpdateUserViaPatchDTO updateUser = new UpdateUserViaPatchDTO()
+                .name(user.name())
+                .job(user.job());
+
+        var result = RestMethod.updateUserViaPatch(updateUser)
+                .getResponseAs(UpdateUserViaPatchDTO.class);
+
+        step("Обновить пользователя", () -> {
+            result.shouldHave(statusCode(200));
+        });
+
+        step("Проверить обновленные данные и дату обновления", () -> {
+            assertThat(result).extracting("name", "job")
+                    .contains(user.name(), user.job());
+            assertThat(result.updatedAt()).contains(date.toString());
         });
     }
 }
