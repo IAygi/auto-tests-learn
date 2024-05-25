@@ -137,8 +137,7 @@ public class VlApiTest {
                 .name(user.name())
                 .job(user.job());
 
-        var result = RestMethod.updateUserViaPatch(updateUser)
-                .getResponseAs(UpdateUserViaPatchDTO.class);
+        var result = RestMethod.updateUserViaPatch(updateUser).getResponseAs(UpdateUserViaPatchDTO.class);
 
         step("Обновить пользователя", () -> {
             result.shouldHave(statusCode(200));
