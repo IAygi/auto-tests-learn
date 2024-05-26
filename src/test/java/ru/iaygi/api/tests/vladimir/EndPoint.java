@@ -9,4 +9,6 @@ public class EndPoint {
 
     public static final String getUserId = "/api/users/";
 
+    public static final String updateUserViaPatch = "/api/users/2";
+
 }

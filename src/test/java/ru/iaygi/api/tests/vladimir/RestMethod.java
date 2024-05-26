@@ -3,6 +3,7 @@ package ru.iaygi.api.tests.vladimir;
 import io.qameta.allure.Step;
 import ru.iaygi.api.service.RestExecutor;
 import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPutDTO;
+import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPatchDTO;
 
 import static io.restassured.http.ContentType.JSON;
 
@@ -32,6 +33,15 @@ public class RestMethod {
         RestExecutor request = new RestExecutor(EndPoint.baseUrl)
                 .contentType(JSON);
         request.get(EndPoint.getUserId + id);
+
+        return request;
+    }
+    @Step("Обновить пользователя методом PATCH")
+    public static RestExecutor updateUserViaPatch(UpdateUserViaPatchDTO updateUserViaPatchDTO) {
+        RestExecutor request = new RestExecutor(EndPoint.baseUrl)
+                .contentType(JSON)
+                .body(updateUserViaPatchDTO);
+        request.patch(EndPoint.updateUserViaPatch);
 
         return request;
     }

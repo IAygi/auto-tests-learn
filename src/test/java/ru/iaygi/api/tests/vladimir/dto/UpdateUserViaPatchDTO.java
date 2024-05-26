@@ -5,16 +5,17 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import ru.iaygi.api.service.StatusCodeCondition;
 
 @Data
 @Accessors(fluent = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserDTO {
-    private Integer id;
-    private String email;
-    private String first_name;
-    private String last_name;
-    private String avatar;
+public class UpdateUserViaPatchDTO {
+    private String name;
+    private String job;
+    private String updatedAt;
+    public void shouldHave(StatusCodeCondition statusCodeCondition) {
+    }
 }
