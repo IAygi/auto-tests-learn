@@ -2,15 +2,25 @@ package ru.iaygi.api.tests.grigoriy;
 
 import io.qameta.allure.*;
 import io.restassured.RestAssured;
-import org.joda.time.LocalDate;
 import org.junit.jupiter.api.*;
-import ru.iaygi.api.tests.vladimir.RestMethod;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
+import ru.iaygi.dto.UserDTO;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.IntStream;
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
-import static io.qameta.allure.internal.shadowed.jackson.databind.util.ClassUtil.name;
+import static org.assertj.core.api.Assertions.entry;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.iaygi.api.service.Conditions.statusCode;
 
 /*
@@ -35,9 +45,7 @@ import static ru.iaygi.api.service.Conditions.statusCode;
 @Epic("")
 @Feature("")
 public class GrApiTest extends Methods {
- Methods methods = new Methods();
-
-
+    Methods methods = new Methods();
 
     @BeforeAll
     public static void setUp() {
@@ -55,18 +63,18 @@ public class GrApiTest extends Methods {
     }
 
     @Test
-    @DisplayName("Получение пользователя по id")
-    @Description("Проверить получение пользователя по id")
+    @DisplayName("Получить ресурс по id")
+    @Description("Проверить, что по id возвращается нужный ресурс")
     void getUserId() {
 
-        step("Получить пользователя по id", () -> {
-            var user =methods.getUser().shouldHave(statusCode(200)).getResponseAs("data",UserDto.class);
+        step("Получить ресурс по id", () -> {
+            var resource = methods.getResourceWithId().shouldHave(statusCode(200)).getResponseAs("data", ResourceDto.class);
             assertAll(
-                    ()-> assertThat(user.id()).isEqualTo(2),
-                    ()-> assertThat(user.name()).isEqualTo("fuchsia rose"),
-                    ()-> assertThat(user.year()).isEqualTo(2001),
-                    ()-> assertThat(user.color()).isEqualTo("#C74375"),
-                    ()-> assertThat(user.pantone_value()).isEqualTo("17-2031")
+                    () -> assertThat(resource.id()).isEqualTo(2),
+                    () -> assertThat(resource.name()).isEqualTo("fuchsia rose"),
+                    () -> assertThat(resource.year()).isEqualTo(2001),
+                    () -> assertThat(resource.color()).isEqualTo("#C74375"),
+                    () -> assertThat(resource.pantone_value()).isEqualTo("17-2031")
             );
         });
     }
@@ -74,7 +82,7 @@ public class GrApiTest extends Methods {
     @Test
     @DisplayName("Создание пользователя")
     @Description("Проверить создание пользователя")
-    void createUser () {
+    void createUser() {
 
 
         step("Создать пользователя", () -> {
@@ -82,10 +90,27 @@ public class GrApiTest extends Methods {
                     .name("morpheus")
                     .job("leader");
             var result = methods.createUser(createUserDto).shouldHave(statusCode(201)).getResponseAs(CreateUserDto.class);
-            assertThat(result).extracting("name","job","createdAt")
-                    .contains("morpheus","leader");
-                });
+            assertThat(result).extracting("name", "job", "createdAt")
+                    .contains("morpheus", "leader");
+        });
     }
 
+    @ParameterizedTest(name = "Получение пользователя по id: {0}")
+    @ValueSource(ints = {1, 2, 3, 4, 5, 6})
+    @DisplayName("ParameterizedTest: ")
+    @Description("Проверить, что id соответствует first_name")
+    void getUserWithId(int argument) {
+        Map<Integer, String> firstName = new HashMap<>();
+        firstName.put(1, "George");
+        firstName.put(2, "Janet");
+        firstName.put(3, "Emma");
+        firstName.put(4, "Eve");
+        firstName.put(5, "Charles");
+        firstName.put(6, "Tracey");
 
+        step("Проверить соотвестветствие id и first_name", () -> {
+            var result = methods.getUserWithId(argument).shouldHave(statusCode(200)).getBodyByPath("data.first_name");
+            assertThat(result).contains(firstName.get(argument));
+        });
+    }
 }

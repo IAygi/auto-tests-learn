@@ -7,21 +7,28 @@ import static io.restassured.http.ContentType.JSON;
 import static ru.iaygi.api.tests.grigoriy.EndPoints.*;
 
 public class Methods {
-    @Step("Получить пользователя по ID")
-    public RestExecutor getUser (){
-        RestExecutor req = new RestExecutor(BASE_URL)
-            .contentType(JSON);
-        req.get(USER_ID);
-        return req;
+    @Step("Получить ресур по id")
+    public RestExecutor getResourceWithId() {
+        RestExecutor request = new RestExecutor(BASE_URL)
+                .contentType(JSON);
+        request.get(RESOURCE);
+        return request;
     }
 
-
-    @Step ("Создать пользователя")
-    public  RestExecutor createUser (CreateUserDto createUserDto) {
-        RestExecutor req = new RestExecutor(BASE_URL)
+    @Step("Создать пользователя")
+    public RestExecutor createUser(CreateUserDto createUserDto) {
+        RestExecutor request = new RestExecutor(BASE_URL)
                 .contentType(JSON)
                 .body(createUserDto);
-        req.post(CREATE_USER);
-        return req;
+        request.post(CREATE_USER);
+        return request;
+    }
+
+    @Step("Получить пользователя по id")
+    public RestExecutor getUserWithId(Integer id) {
+        RestExecutor request = new RestExecutor(BASE_URL)
+                .contentType(JSON);
+        request.get(GET_USER + id);
+        return request;
     }
 }
