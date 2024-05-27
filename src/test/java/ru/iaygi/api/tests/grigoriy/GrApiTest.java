@@ -113,4 +113,13 @@ public class GrApiTest extends Methods {
             assertThat(result).contains(firstName.get(argument));
         });
     }
+
+    @Test
+    @DisplayName("Обновить пользователя")
+    @Description("Проверить обновление пользователя")
+    void updateUser (){
+
+    }
+
+
 }
