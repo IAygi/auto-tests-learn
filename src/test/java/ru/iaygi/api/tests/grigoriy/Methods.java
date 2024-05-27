@@ -31,4 +31,13 @@ public class Methods {
         request.get(GET_USER + id);
         return request;
     }
+
+    @Step("Обновить пользователя по id")
+    public RestExecutor updateUser (CreateUserDto createUserDto) {
+        RestExecutor request = new RestExecutor(BASE_URL)
+                .contentType(JSON)
+                .body(createUserDto);
+        request.put(UPDATE_USER);
+        return request;
+    }
 }

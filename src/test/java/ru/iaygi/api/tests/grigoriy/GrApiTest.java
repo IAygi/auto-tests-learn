@@ -4,23 +4,15 @@ import io.qameta.allure.*;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import ru.iaygi.dto.UserDTO;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.IntStream;
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
-import static org.assertj.core.api.Assertions.entry;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static ru.iaygi.api.service.Conditions.statusCode;
 
 /*
@@ -40,12 +32,15 @@ import static ru.iaygi.api.service.Conditions.statusCode;
  */
 
 @Severity(NORMAL)
-@Owner("")
+@Owner("Galyamskiy")
 @Tag("api_test")
-@Epic("")
-@Feature("")
+@Epic("Учусь автотестировать")
+@Feature("API тесты")
 public class GrApiTest extends Methods {
     Methods methods = new Methods();
+    private CreateUserDto user;
+    CreateUserDto result;
+
 
     @BeforeAll
     public static void setUp() {
@@ -113,4 +108,19 @@ public class GrApiTest extends Methods {
             assertThat(result).contains(firstName.get(argument));
         });
     }
+
+    @Test
+    @DisplayName("Обновить пользователя")
+    @Description("Проверить обновление пользователя")
+    void updateUser() {
+        user = UserDataGr.randomUser();
+        step("Обновить пользователя", () -> {
+            result = methods.updateUser(user).shouldHave(statusCode(200)).getResponseAs(CreateUserDto.class);
+        });
+        step("Проверить что пользователь обновился", () -> {
+            assertThat(result).extracting("name", "job").contains(user.name(), user.job());
+        });
+    }
+
+
 }
