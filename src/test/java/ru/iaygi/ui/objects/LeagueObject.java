@@ -22,6 +22,6 @@ public class LeagueObject {
 
     public void checkHeader() {
         $("h2").should(exactText("Работа в Лиге — это возможности!")).shouldBe(visible);
-        Allure.attachment("Результат сравнения с эталоном", "Расхождений нет");
+        Allure.attachment("Проверка заголовка", "Расхождений нет");
     }
 }

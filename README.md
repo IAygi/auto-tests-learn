@@ -61,5 +61,5 @@ task smoke_tests(type: Test) {
 4. Настройка отчётов в Allure Report
 5. Настройка Selenoid
 6. Интеграция с Allure TestOps
-7. Интеграция c CI/CD
-8. Тестирование БД (JDBC)
+7. Тестирование БД (JDBC)
+8. Интеграция c CI/CD

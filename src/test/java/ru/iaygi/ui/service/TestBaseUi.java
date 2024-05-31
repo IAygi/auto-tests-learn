@@ -7,6 +7,7 @@ import io.qameta.allure.Step;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import ru.iaygi.ui.data.TestData;
 
@@ -32,7 +33,7 @@ public class TestBaseUi {
         Configuration.browserSize = "1920x1080";
 
         options = new ChromeOptions();
-        options.setCapability("browserVersion", "113.0");
+        options.setCapability("browserVersion", "124.0");
         options.setCapability("selenoid:options", new HashMap<String, Object>() {
             {
                 put("name", "Website Test");
