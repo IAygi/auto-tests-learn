@@ -1,12 +1,12 @@
 package ru.iaygi.api.tests.vladimir.data;
 
+import ru.iaygi.api.tests.vladimir.dto.AccountDTO;
 import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPatchDTO;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static ru.iaygi.api.tests.vladimir.data.FakeData.job;
-import static ru.iaygi.api.tests.vladimir.data.FakeData.name;
+import static ru.iaygi.api.tests.vladimir.data.FakeData.*;
 
 public class UserData {
     public static Map<Integer, String> users = new HashMap<>() {
@@ -24,5 +24,10 @@ public class UserData {
         return new UpdateUserViaPatchDTO()
                 .name(name())
                 .job(job());
+    }
+    public static AccountDTO randomUser(){
+        return new AccountDTO()
+                .userName(userName())
+                .password(password());
     }
 }
