@@ -8,10 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import ru.iaygi.api.tests.vladimir.data.UserData;
-import ru.iaygi.api.tests.vladimir.dto.ResourceDTO;
-import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPutDTO;
-import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPatchDTO;
-import ru.iaygi.api.tests.vladimir.dto.UserDTO;
+import ru.iaygi.api.tests.vladimir.dto.*;
 
 import java.util.stream.Stream;
 
@@ -20,6 +17,7 @@ import static io.qameta.allure.SeverityLevel.NORMAL;
 import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static ru.iaygi.api.service.Conditions.statusCode;
+import static ru.iaygi.api.tests.vladimir.data.FakeData.name;
 import static ru.iaygi.api.tests.vladimir.data.UserData.users;
 
 /*
@@ -47,6 +45,8 @@ public class VlApiTest {
 
     private UpdateUserViaPatchDTO user;
     private LocalDate date;
+    private UpdateUserViaPatchDTO result;
+    private UserDTO res;
 
     private static Stream<Arguments> idValues() {
         return Stream.of(
@@ -118,12 +118,12 @@ public class VlApiTest {
     void getUserId(String userId, String userName) {
 
         step("Получить пользователя по id", () -> {
-            RestMethod.getUserId(userId).shouldHave(statusCode(200));
+           res = RestMethod.getUserId(userId).shouldHave(statusCode(200))
+                    .getResponseAs("data", UserDTO.class);
         });
 
         step("Проверить id и first_name у полученного пользователя", () -> {
-            var result = RestMethod.getUserId(userId).getResponseAs("data", UserDTO.class);
-            assertThat(result).extracting("id", "first_name")
+            assertThat(res).extracting("id", "first_name")
                     .contains(parseInt(userId), userName);
         });
     }
@@ -133,14 +133,12 @@ public class VlApiTest {
     @Description("Обновить пользователя методом PATCH")
     void updateUserViaPatch() {
 
-        UpdateUserViaPatchDTO updateUser = new UpdateUserViaPatchDTO()
-                .name(user.name())
-                .job(user.job());
-
-        var result = RestMethod.updateUserViaPatch(updateUser).getResponseAs(UpdateUserViaPatchDTO.class);
-
         step("Обновить пользователя", () -> {
-            result.shouldHave(statusCode(200));
+            UpdateUserViaPatchDTO updateUser = new UpdateUserViaPatchDTO()
+                    .name(user.name())
+                    .job(user.job());
+            result = RestMethod.updateUserViaPatch(updateUser).shouldHave(statusCode(200))
+                    .getResponseAs(UpdateUserViaPatchDTO.class);
         });
 
         step("Проверить обновленные данные и дату обновления", () -> {

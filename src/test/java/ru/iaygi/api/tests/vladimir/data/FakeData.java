@@ -13,5 +13,9 @@ public class FakeData {
     public static String job() {
         return faker.job().title();
     }
+
+    public static String userName() {
+        return faker.name().firstName();
+    }
 }
 
