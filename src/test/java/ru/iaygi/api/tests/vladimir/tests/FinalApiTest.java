@@ -1,7 +1,6 @@
 package ru.iaygi.api.tests.vladimir.tests;
 
 import io.qameta.allure.*;
-import io.restassured.path.json.JsonPath;
 import org.junit.jupiter.api.*;
 import ru.iaygi.api.tests.vladimir.RestMethod;
 import ru.iaygi.api.tests.vladimir.dto.*;
@@ -10,7 +9,6 @@ import java.util.*;
 
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
-import static java.lang.Integer.parseInt;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static ru.iaygi.api.service.Conditions.statusCode;
@@ -22,12 +20,12 @@ import static ru.iaygi.api.tests.vladimir.data.UserData.randomUser;
 @Epic("BookStore")
 @Feature("Работа с пользователями и книгами")
 public class FinalApiTest {
-
-    private AccountDTO user;
-    private BookStoreDTO addedBook;
+    private BookStoreDTO user;
     private List<BookStoreDTO> booksList;
-    private AccountDTO token;
-    private String getBookIsbn;
+    private String isbn;
+    private String userId;
+    private String token;
+    private BookStoreDTO bookInfo;
 
     @BeforeAll
     public static void setUp() {
@@ -35,7 +33,7 @@ public class FinalApiTest {
 
     @BeforeEach
     void prepare() {
-        //user = randomUser();
+        user = randomUser();
     }
 
     @AfterEach
@@ -44,60 +42,64 @@ public class FinalApiTest {
 
     @Test
     @DisplayName("Добавление книги в профиль пользователя")
-    @Description("Проверить, что книга добавилась в профиль")
+    @Description("Провести полный цикл создания пользователя и редактирования списка книг в профиле")
     void addBookToProfile() {
 
-        user = new AccountDTO()
-               .userName("Lonnie")
-               .password("8i@lFxai");
-
-
-       // step("Создать пользователя", () -> {
-         //   RestMethod.createUser(user).shouldHave(statusCode(201));
-        //});
-
-        step("Получить токен", () -> {
-            token = RestMethod.generateToken(user).shouldHave(statusCode(200)).getResponseAs(AccountDTO.class);
+        step("Создать пользователя и получить его идентификатор", () -> {
+            var getUserId = RestMethod.createUser(user).shouldHave(statusCode(201)).getResponseAs(BookStoreDTO.class);
+            userId = getUserId.userID;
         });
 
         step("Произвести логин", () -> {
-            RestMethod.authorize(user)
-                    .header("Authorization",
-                            token.toString());
+            RestMethod.authorize(user).shouldHave(statusCode(200));
         });
 
-        step("Получить список доступных книг", () -> {
-            booksList = RestMethod.getBooksList().shouldHave(statusCode(200))
-                    .getResponseAsJson().getList("books", BookStoreDTO.class);
+        step("Получить токен", () -> {
+            var getToken = RestMethod.generateToken(user).shouldHave(statusCode(200)).getResponseAs(BookStoreDTO.class);
+            token = getToken.token;
         });
 
-        step("Добавить книгу в список пользователя", () -> {
-            getBookIsbn = booksList.get(0).isbn();
-            addedBook = RestMethod.addBook("ba096992-2314-4b42-941a-616d4ef4e2a2",getBookIsbn)
-                    .shouldHave(statusCode(200)).getResponseAs(BookStoreDTO.class);
+        step("Выбрать книгу из списка доступных книг", () -> {
+            booksList = RestMethod.getBooksList().shouldHave(statusCode(200)).getResponseAsJson()
+                    .getList("books", BookStoreDTO.class);
+            isbn = booksList.get(0).isbn();
+            bookInfo = booksList.get(0);
+        });
 
+        step("Добавить книгу в профиль пользователя", () -> {
+            RestMethod.addBook(userId, isbn, token).shouldHave(statusCode(201)).getResponseAs(BookStoreDTO.class);
         });
 
         step("Проверить, что книга добавилась в профиль пользователя", () -> {
-
-            var usersBooks = RestMethod.getUserBooks(user.userId()).shouldHave(statusCode(200))
-                    .getResponseAs(BookStoreDTO.class);
-
+            var userBookList = RestMethod.getUserBooks(userId, token).shouldHave(statusCode(200))
+                    .getResponseAsJson().getList("books", BookStoreDTO.class);
             assertAll(
-                    () -> assertThat(usersBooks.isbn()).isEqualTo(addedBook.isbn()),
-                    () -> assertThat(usersBooks.title()).isEqualTo(addedBook.title()),
-                    () -> assertThat(usersBooks.subTitle()).isEqualTo(addedBook.subTitle()),
-                    () -> assertThat(usersBooks.author()).isEqualTo(addedBook.author())
+                    () -> assertThat(userBookList.get(0)).extracting("isbn")
+                            .isEqualTo(isbn),
+                    () -> assertThat(userBookList.get(0)).extracting("title")
+                            .isEqualTo(bookInfo.title()),
+                    () -> assertThat(userBookList.get(0)).extracting("subTitle")
+                            .isEqualTo(bookInfo.subTitle()),
+                    () -> assertThat(userBookList.get(0)).extracting("author")
+                            .isEqualTo(bookInfo.author())
             );
         });
-        /*
-        Optional
 
         step("Удалить книгу из профиля", () -> {
+            RestMethod.deleteBook(isbn, userId, token).shouldHave(statusCode(204));
         });
 
         step("Проверить, что книга удалилась из профиля пользователя", () -> {
+            var checkDeletedBooks = RestMethod.getUserBooks(userId, token).shouldHave(statusCode(200))
+                    .getResponseAs(BookStoreDTO.class);
+            assertAll(
+                    () -> assertThat(checkDeletedBooks.userId()).isEqualTo(userId),
+                    () -> assertThat(checkDeletedBooks.books()).doesNotContain(isbn)
+            );
         });
-         */
+
+        step("Удалить пользователя", () -> {
+            RestMethod.deleteUser(userId, token).shouldHave(statusCode(204));
+        });
     }
 }

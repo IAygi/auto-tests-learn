@@ -14,14 +14,16 @@ import java.util.*;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BookStoreDTO {
-    private ArrayList<Object> books;
     private String isbn;
     private String title;
     private String subTitle;
     private String author;
     private String userId;
-    public static class CollectionOfIsbns{
-        public void collectionOfIsbns(String, String){
-        };
-    };
+    public String userID;
+    private String userName;
+    private String password;
+    public String token;
+    private ArrayList<Object> books;
+    public ArrayList<Object> collectionOfIsbns;
 }
+

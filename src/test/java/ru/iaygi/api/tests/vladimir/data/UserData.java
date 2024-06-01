@@ -1,6 +1,6 @@
 package ru.iaygi.api.tests.vladimir.data;
 
-import ru.iaygi.api.tests.vladimir.dto.AccountDTO;
+import ru.iaygi.api.tests.vladimir.dto.BookStoreDTO;
 import ru.iaygi.api.tests.vladimir.dto.UpdateUserViaPatchDTO;
 
 import java.util.HashMap;
@@ -25,9 +25,10 @@ public class UserData {
                 .name(name())
                 .job(job());
     }
-    public static AccountDTO randomUser(){
-        return new AccountDTO()
+
+    public static BookStoreDTO randomUser() {
+        return new BookStoreDTO()
                 .userName(userName())
-                .password(password());
+                .password("%zvVY&2!");
     }
 }
