@@ -17,4 +17,12 @@ public class FakeDataGr {
     public static String job() {
         return fakerResult(faker.job().title());
     }
+
+    public static String username() {
+        return fakerResult(faker.name().username());
+    }
+
+    public static String password() {
+        return fakerResult(faker.regexify("[a-z]{3}[A-Z]{3}[0-9]{1}\\#"));
+    }
 }
