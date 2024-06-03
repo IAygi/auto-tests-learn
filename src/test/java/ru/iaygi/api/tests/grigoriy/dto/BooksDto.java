@@ -1,21 +1,18 @@
-package ru.iaygi.api.tests.grigoriy;
+package ru.iaygi.api.tests.grigoriy.dto;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.experimental.Accessors;
+
+import java.util.List;
 @Data
 @Accessors(fluent = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 @JsonIgnoreProperties(ignoreUnknown = true)
 
-public class ResourceDto {
-        private Integer id;
-        private String name;
-        private Integer year;
-        private String color;
-        private String pantone_value;
-    }
-
+public class BooksDto{
+	private List<BooksItemDto> books;
+}
