@@ -18,6 +18,8 @@ import static io.qameta.allure.SeverityLevel.NORMAL;
 @Feature("Обучение")
 public class UITest {
 
+    PageObjects pageObjects = new PageObjects();
+
     @BeforeAll
     public static void init() {}
 
@@ -44,6 +46,26 @@ public class UITest {
         step("Проверить условия поступления на стажировку", () -> {
             $("#heading-kto-mozhet-postupit-na-stazhirovku").click();
             $("#collapse-101").shouldHave(text("Студент 4 курса бакалавриата"));
+        });
+    }
+
+    @Test
+    @Tag("PageObject")
+    @DisplayName("Проверка формы авторизации")
+    @Description("Проверить, авторизацию и заголовок")
+    public void checkAuthorizationAndTitle() {
+
+        Configuration.holdBrowserOpen = true;
+        step("Открыть страницу с формой авторизации", () -> {
+            pageObjects.openAuthorizationPage();
+        });
+
+        step("Залогиниться", () -> {
+            pageObjects.loginViaUser();
+        });
+
+        step("Проверить заголовок на странице", () -> {
+            pageObjects.checkHeader("Welcome to the Secure Area. When you are done click logout below.");
         });
     }
 }
