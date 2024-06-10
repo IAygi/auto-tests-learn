@@ -8,21 +8,24 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import ru.iaygi.ui.objects.LeagueObject;
 import ru.iaygi.ui.objects.MainPageObjects;
 import ru.iaygi.ui.service.TestBaseUi;
+import ru.iaygi.ui.service.TestResultLoggerExtension;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith({TextReportExtension.class})
 @Owner("iaygi")
 @Severity(CRITICAL)
 @Tag("ui_test")
 @Tag("regression")
 @Epic("WebSite")
 @Feature("Основная функциональность")
+@ExtendWith({TextReportExtension.class})
+@ExtendWith(TestResultLoggerExtension.class)
 public class WebsiteTest extends TestBaseUi {
 
     private static MainPageObjects mainPageObjects;
