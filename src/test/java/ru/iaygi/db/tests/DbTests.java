@@ -5,6 +5,7 @@ import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Severity;
 import org.junit.jupiter.api.*;
+import ru.iaygi.api.data.FakeData;
 import ru.iaygi.db.data.Sql;
 import ru.iaygi.db.objects.DbMethods;
 import ru.iaygi.db.service.DbConnect;
@@ -17,7 +18,7 @@ import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
-import static ru.iaygi.db.data.Sql.GET_CUSTOMERS;
+import static ru.iaygi.db.data.Sql.*;
 
 @Severity(CRITICAL)
 @Tag("db_test")
@@ -29,6 +30,9 @@ public class DbTests extends DbConnect {
     private ResultSet resultSet;
     private DbMethods dbMethods = new DbMethods();
     private List<UserDTO> list;
+    private int listSize;
+    private Sql sql = new Sql();
+    private FakeData fakeData = new FakeData();
 
     @BeforeEach
     void prepare() {
@@ -39,7 +43,6 @@ public class DbTests extends DbConnect {
     void cleanup() {
         connectClose();
     }
-
 
     @Test
     @DisplayName("Получение списка покупателей из БД")
@@ -60,6 +63,26 @@ public class DbTests extends DbConnect {
         step("Проверить покупателя №1", () -> {
             assertThat(list).extracting("id", "name", "email")
                     .contains(tuple(id, name, email));
+        });
+    }
+
+    @Test
+    @DisplayName("Добавление покупателя в список")
+    @Description("Проверить добавление покупателя в список")
+    void insertUser() {
+        String name = fakeData.fullName();
+        String email = fakeData.email();
+
+        step("Сделать SQL запрос на получение покупателей", () -> {
+            resultSet = getRequest(GET_CUSTOMERS);
+        });
+
+        step("Получить количество покупателей", () -> {
+            listSize = dbMethods.getCustomers(resultSet).size();
+        });
+
+        step("Сделать SQL запрос на добавление покупателя", () -> {
+            inseretRequest(sql.insertCustomer(listSize + 1, name, email));
         });
     }
 }

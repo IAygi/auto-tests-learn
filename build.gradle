@@ -51,6 +51,9 @@ dependencies {
             "mysql:mysql-connector-java:8.0.33",
             "org.postgresql:postgresql:42.7.3"
     )
+    testImplementation("ru.yandex.qatools.ashot:ashot:1.5.4") {
+        exclude group: 'org.seleniumhq.selenium', module: 'selenium-remote-driver'
+    }
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine"
     testRuntimeOnly "org.slf4j:slf4j-simple:2.0.13"
     compileOnly "org.projectlombok:lombok:1.18.28"

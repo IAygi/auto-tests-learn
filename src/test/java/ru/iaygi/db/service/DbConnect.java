@@ -18,22 +18,9 @@ public class DbConnect {
     private Statement statement;
     private ResultSet resultSet;
 
-    @Step("SQL request")
+    @Step("SQL select")
     public ResultSet getRequest(String sqlRequest) {
-        log.info("DB connection with sql");
-        try {
-            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
-            log.info("Successfully connected to the database");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            statement = connection.createStatement();
-            log.info("Statement created");
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        prepareToRequest();
 
         try {
             resultSet = statement.executeQuery(sqlRequest);
@@ -45,52 +32,35 @@ public class DbConnect {
         return resultSet;
     }
 
-    @Step("SQL request")
-    public List getAllUsers(ResultSet resultSet) {
-        log.debug("GET all users");
-        List<UserDTO> listObjects;
+    @Step("SQL insert")
+    public void inseretRequest(String sqlRequest) {
+        prepareToRequest();
 
         try {
-            listObjects = new ArrayList<>();
-            while (resultSet.next()) {
-                UserDTO users = new UserDTO();
-                users.id(resultSet.getInt("id"));
-                users.login(resultSet.getString("login"));
-                users.name(resultSet.getString("name"));
-                users.surname(resultSet.getString("surname"));
-                users.age(resultSet.getString("age"));
-                users.city(resultSet.getString("city"));
-                listObjects.add(users);
-            }
+            statement.execute(sqlRequest);
+            log.info("JDBC query executed successfully");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        return listObjects;
     }
 
-    @Step("SQL request")
-    public List createUser(ResultSet resultSet) {
-        log.debug("Create user");
-        List<UserDTO> listObjects;
-
+    @Step("Create connection & statement")
+    public void prepareToRequest() {
+        log.info("DB connection with sql");
         try {
-            listObjects = new ArrayList<>();
-            while (resultSet.next()) {
-                UserDTO users = new UserDTO();
-                users.id(resultSet.getInt("id"));
-                users.login(resultSet.getString("login"));
-                users.name(resultSet.getString("name"));
-                users.surname(resultSet.getString("surname"));
-                users.age(resultSet.getString("age"));
-                users.city(resultSet.getString("city"));
-                listObjects.add(users);
-            }
+            connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            log.info("Successfully connected to the database");
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
 
-        return listObjects;
+        log.info("Create statement");
+        try {
+            statement = connection.createStatement();
+            log.info("Statement created");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Step("Close connection")
@@ -101,7 +71,6 @@ public class DbConnect {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
 
         try {
             statement.close();
