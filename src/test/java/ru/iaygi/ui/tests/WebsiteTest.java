@@ -24,8 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Tag("regression")
 @Epic("WebSite")
 @Feature("Основная функциональность")
-@ExtendWith({TextReportExtension.class})
-@ExtendWith(TestResultLoggerExtension.class)
+@ExtendWith({TextReportExtension.class, TestResultLoggerExtension.class})
 public class WebsiteTest extends TestBaseUi {
 
     private static MainPageObjects mainPageObjects;
@@ -93,7 +92,7 @@ public class WebsiteTest extends TestBaseUi {
         });
 
         step("Проверить заголовок страницы", () -> {
-            $(".page-title").shouldHave(exactText("Контакты?")); // Специально сломанный тест
+            assertEquals($(".page-title").getText(), "Контакты?");
         });
     }
 
