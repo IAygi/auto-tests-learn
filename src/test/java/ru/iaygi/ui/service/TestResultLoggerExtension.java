@@ -1,31 +1,28 @@
 package ru.iaygi.ui.service;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.extension.AfterAllCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
 import org.openqa.selenium.OutputType;
-import ru.yandex.qatools.ashot.comparison.ImageDiff;
+import org.openqa.selenium.TakesScreenshot;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codeborne.selenide.Condition.exist;
 import static com.codeborne.selenide.Selenide.$;
 
 public class TestResultLoggerExtension implements TestWatcher, AfterAllCallback {
     private List<TestResultStatus> testResultsStatus = new ArrayList<>();
-    private Path path = Path.of("build/reports/tests/test/");
+    private Path path = Path.of("build/reports/tests/");
 
     @Override
     public void afterAll(ExtensionContext extensionContext) throws Exception {
@@ -50,9 +47,9 @@ public class TestResultLoggerExtension implements TestWatcher, AfterAllCallback 
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
         TestWatcher.super.testFailed(context, cause);
-        String imageName = "test.png";
-        SelenideElement element = $("html");
-        File actualFile = element.getScreenshotAs(OutputType.FILE);
+
+        String imageName = context.getRequiredTestMethod().getName() + ".png";
+        File actualFile = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.FILE);
 
         try {
             FileUtils.copyFile(actualFile, new File(path + "/" + imageName));
