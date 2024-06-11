@@ -6,7 +6,7 @@ import java.util.Locale;
 
 public class FakeData {
 
-    private static final Faker faker = new Faker(new Locale("ru-RU"));
+    private static final Faker faker = new Faker();
 
     public static String login() {
         return fakerResult(faker.name().username());
@@ -21,7 +21,8 @@ public class FakeData {
     }
 
     public static String fullName() {
-        return fakerResult(faker.name().fullName());
+        Faker fakerLocal = new Faker(new Locale("ru-RU"));
+        return fakerResult(fakerLocal.name().fullName());
     }
 
     public static String cityName() {
@@ -29,7 +30,7 @@ public class FakeData {
     }
 
     public static String email() {
-        return faker.internet().emailAddress(String.valueOf(new Locale("en-GB")));
+        return faker.internet().emailAddress();
     }
 
     public static int number() {
