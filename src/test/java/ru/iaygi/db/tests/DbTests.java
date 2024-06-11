@@ -9,7 +9,7 @@ import ru.iaygi.api.data.FakeData;
 import ru.iaygi.db.data.Sql;
 import ru.iaygi.db.objects.DbMethods;
 import ru.iaygi.db.service.DbConnect;
-import ru.iaygi.dto.UserDTO;
+import ru.iaygi.dto.CustomersDTO;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -18,7 +18,7 @@ import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
-import static ru.iaygi.db.data.Sql.*;
+import static ru.iaygi.db.data.Sql.GET_CUSTOMERS;
 
 @Severity(CRITICAL)
 @Tag("db_test")
@@ -29,7 +29,7 @@ public class DbTests extends DbConnect {
 
     private ResultSet resultSet;
     private DbMethods dbMethods = new DbMethods();
-    private List<UserDTO> list;
+    private List<CustomersDTO> list;
     private int listSize;
     private Sql sql = new Sql();
     private FakeData fakeData = new FakeData();
