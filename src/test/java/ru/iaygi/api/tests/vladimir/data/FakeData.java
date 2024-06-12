@@ -7,7 +7,7 @@ public class FakeData {
     private static final Faker faker = new Faker();
 
     public static String name() {
-        return faker.name().nameWithMiddle();
+        return faker.name().name();
     }
 
     public static String job() {
@@ -16,6 +16,10 @@ public class FakeData {
 
     public static String userName() {
         return faker.name().firstName();
+    }
+
+    public static String email() {
+        return faker.internet().emailAddress();
     }
 }
 
