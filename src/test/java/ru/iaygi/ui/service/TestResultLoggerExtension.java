@@ -1,6 +1,5 @@
 package ru.iaygi.ui.service;
 
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import io.qameta.allure.Attachment;
 import org.apache.commons.io.FileUtils;
@@ -9,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestWatcher;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import ru.iaygi.api.data.FakeData;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,8 +17,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
-import static com.codeborne.selenide.Selenide.$;
 
 public class TestResultLoggerExtension implements TestWatcher, AfterAllCallback {
     private List<TestResultStatus> testResultsStatus = new ArrayList<>();
@@ -48,7 +46,7 @@ public class TestResultLoggerExtension implements TestWatcher, AfterAllCallback 
     public void testFailed(ExtensionContext context, Throwable cause) {
         TestWatcher.super.testFailed(context, cause);
 
-        String imageName = context.getRequiredTestMethod().getName() + ".png";
+        String imageName = context.getRequiredTestMethod().getName() + new FakeData().numbers(5) + ".png";
         File actualFile = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.FILE);
 
         try {
