@@ -1,0 +1,67 @@
+pipeline {
+    agent any
+    environment {
+            SMTP_PASS = credentials('9530076d-e84b-4f24-a8a7-30e68f51f17a')
+        }
+	parameters {
+	choice(
+		name: 'TASKS',
+		choices: ['smoke_tests', 'regression_tests', 'ui_tests', 'api_tests', 'test'],
+		description: 'Выбор тестового прогона'
+		)
+	choice(
+		name: 'VNC_ENABLED',
+		choices: ['true', 'false'],
+		description: 'Отображение экрана браузера в Selenoid'
+		)
+	choice(
+		name: 'VIDEO_ENABLED',
+		choices: ['false', 'true'],
+		description: 'Запись видео в Selenoid'
+		)
+    string(
+       name: 'EMAIL',
+       defaultValue: 'test@mail.ru',
+       description: 'Email адреса для отправки результатов тестового прогона, укзываются через запятую')
+	}
+    stages {
+        stage('Clean') {
+          steps {
+            sh 'chmod +x gradlew'
+            sh './gradlew clean'
+          }
+        }
+        stage('Test') {
+          steps {
+			script {
+			try {
+				sh './gradlew ${TASKS} -Dvnc_enabled=${VNC_ENABLED} -Dselenoid_enabled=true -Dvideo_enabled=${VIDEO_ENABLED} --no-daemon --warning-mode=all'
+			}
+			catch (Exception e) {
+				println("Error ${e}")
+			}
+          }
+		  }
+        }
+        stage('Allure Report') {
+          steps {
+            allure([
+            includeProperties: false,
+            jdk: '',
+            properties: [],
+            reportBuildPolicy: 'ALWAYS',
+            results: [[path: 'build/allure-results']]
+            ])
+          }
+        }
+		stage('Email Report') {
+            steps {
+                script{
+					writeFile file: "notifications/config.json", text: "{\"base\":{\"logo\":\"\",\"project\":\"${JOB_BASE_NAME}\",\"environment\":\"https://test.ru\",\"comment\":\"Was launched ${TASKS} in Jenkins\",\"reportLink\":\"${BUILD_URL}\",\"language\":\"en\",\"allureFolder\":\"./allure-report/\",\"enableChart\":true},\"mail\":{\"host\":\"smtp.gmail.com\",\"port\":\"465\",\"username\":\"test_mail@gmail.com\",\"password\":\"${SMTP_PASS}\",\"securityProtocol\":\"SSL\",\"from\":\"test@mail.ru\",\"recipient\":\"${EMAIL}\"}}"
+                    sh 'java "-DconfigFile=notifications/config.json" -jar notifications/allure-notifications-4.3.0.jar'
+            }
+            }
+        }
+    }
+}
+
