@@ -16,6 +16,8 @@ import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static ru.iaygi.db.vladimir.service.DataBaseService.customer;
 
 @Severity(NORMAL)
 @Tag("db_test")
@@ -24,52 +26,45 @@ import static org.assertj.core.groups.Tuple.tuple;
 @Feature("Работа с пользователями через БД")
 public class DbTest extends DbConnect {
 
-    private static DataBaseService dataBaseService = new DataBaseService();
+    public static final String tableName = "public.customers";
+    private static final DataBaseService dataBaseService = new DataBaseService();
+    private static String name;
+    private static String email;
     private ResultSet resultSet;
     private List<CustomersDTO> list;
     private DbMethods dbMethods = new DbMethods();
-    private static String name;
-    private static String email;
-    private int listSize;
     private Sql sql = new Sql();
-
 
     @BeforeAll
     public static void setUp() {
-        dataBaseService.createNewTable();
-        dataBaseService.addInitialData();
-        name = DataBaseService.customer.name();
-        email = DataBaseService.customer.email();
+        name = customer.name();
+        email = customer.email();
     }
 
     @BeforeEach
     void prepare() {
+        dataBaseService.createNewTable();
+        dataBaseService.addInitialData();
     }
 
     @AfterEach
-    void disconnect() {
-    }
-
-    @AfterAll
-    public static void cleanUp() {
+    void cleanup() {
         dataBaseService.deleteCreatedTable();
+        connectClose();
     }
 
     @Test
     @DisplayName("Получение списка покупателей")
-    @Description("Проверить получение списка покупателей")
+    @Description("Проверить покупателя в списке покупателей")
     void getAllCustomers() {
         int id = 1;
 
         step("Сделать SQL запрос на получение покупателей", () -> {
-            resultSet = getRequest(sql.getAllCustomers("Customers"));
+            resultSet = getRequest(sql.getAllCustomers(tableName));
         });
 
-        step("Получить коллекцию покупателей", () -> {
+        step("Получить коллекцию покупателей и проверить покупателя", () -> {
             list = dbMethods.getCustomers(resultSet);
-        });
-
-        step("Проверить покупателя", () -> {
             assertThat(list).extracting("id", "name", "email").contains(tuple(id, name, email));
         });
     }
@@ -82,15 +77,25 @@ public class DbTest extends DbConnect {
         email = FakeData.email();
 
         step("Сделать SQL запрос на получение покупателей", () -> {
-            resultSet = getRequest(sql.getAllCustomers("Customers"));
+            resultSet = getRequest(sql.getAllCustomers(tableName));
         });
 
         step("Получить коллекцию покупателей", () -> {
-            listSize = dbMethods.getCustomers(resultSet).size();
+            list = dbMethods.getCustomers(resultSet);
         });
 
         step("Сделать SQL запрос на добавление покупателя", () -> {
-            insertRequest(sql.insertCustomer("Customers", listSize + 1, name, email));
+            insertRequest(sql.insertCustomer(tableName, list.size() + 1, name, email));
+        });
+
+        step("Сделать SQL запрос на получение покупателей", () -> {
+            resultSet = getRequest(sql.getAllCustomers(tableName));
+        });
+
+        step("Получить коллекцию покупателей и проверить добавление покупателя", () -> {
+            list = dbMethods.getCustomers(resultSet);
+            assertThat(list).extracting("id", "name", "email")
+                    .contains(tuple(list.get(1).id(), name, email));
         });
     }
 
@@ -102,18 +107,22 @@ public class DbTest extends DbConnect {
         name = FakeData.name();
         email = FakeData.email();
 
-        step("Сделать SQL запрос на получение покупателей", () -> {
-            resultSet = getRequest(sql.getAllCustomers("Customers"));
-        });
-
-        step("Получить коллекцию покупателей", () -> {
-            list = dbMethods.getCustomers(resultSet);
-        });
-
         step("Сделать SQL запрос на редактирование покупателя", () -> {
-            updateRequest(sql.updateCustomer("Customers", id, name, email));
+            updateRequest(sql.updateCustomer(tableName, id, name, email));
         });
 
+        step("Сделать SQL запрос на получение покупателей", () -> {
+            resultSet = getRequest(sql.getAllCustomers(tableName));
+        });
+
+        step("Получить коллекцию покупателей и проверить, что данные о покупателе обновились", () -> {
+            list = dbMethods.getCustomers(resultSet);
+            assertAll(
+                    () -> assertThat(list.get(0)).extracting("id").isEqualTo(id),
+                    () -> assertThat(list.get(0)).extracting("name").isEqualTo(name),
+                    () -> assertThat(list.get(0)).extracting("email").isEqualTo(email)
+            );
+        });
     }
 
     @Test
@@ -123,20 +132,16 @@ public class DbTest extends DbConnect {
         int id = 1;
 
         step("Сделать SQL запрос на удаление покупателя", () -> {
-            deleteRequest(sql.deleteCustomer("Customers", id));
+            deleteRequest(sql.deleteCustomer(tableName, id));
         });
 
         step("Сделать SQL запрос на получение покупателей", () -> {
-            resultSet = getRequest(sql.getAllCustomers("Customers"));
+            resultSet = getRequest(sql.getAllCustomers(tableName));
         });
 
         step("Получить коллекцию покупателей", () -> {
             list = dbMethods.getCustomers(resultSet);
+            assertThat(list).extracting("id", "name", "email").doesNotContain(tuple(id, name, email));
         });
-
-        step("Проверить, что покупатель был удален", () -> {
-            assertThat(list).extracting("id", "name", "email").doesNotContain(tuple(id));
-        });
-
     }
 }

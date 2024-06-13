@@ -9,7 +9,6 @@ import static ru.iaygi.db.vladimir.DbData.DbData.*;
 
 @Slf4j
 public class DbConnect {
-
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
@@ -121,4 +120,3 @@ public class DbConnect {
         }
     }
 }
-
