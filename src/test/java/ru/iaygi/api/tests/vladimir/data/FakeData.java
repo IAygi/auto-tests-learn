@@ -2,12 +2,15 @@ package ru.iaygi.api.tests.vladimir.data;
 
 import com.github.javafaker.Faker;
 
+import java.util.Locale;
+
 public class FakeData {
 
     private static final Faker faker = new Faker();
 
     public static String name() {
-        return faker.name().nameWithMiddle();
+        Faker faker = new Faker(new Locale("ru-RU"));
+        return faker.name().name();
     }
 
     public static String job() {
@@ -16,6 +19,10 @@ public class FakeData {
 
     public static String userName() {
         return faker.name().firstName();
+    }
+
+    public static String email() {
+        return faker.internet().emailAddress();
     }
 }
 

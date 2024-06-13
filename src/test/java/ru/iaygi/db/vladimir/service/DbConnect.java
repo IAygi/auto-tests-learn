@@ -1,19 +1,14 @@
-package ru.iaygi.db.service;
+package ru.iaygi.db.vladimir.service;
 
 import io.qameta.allure.Step;
 import lombok.extern.slf4j.Slf4j;
-import ru.iaygi.db.data.DbData;
-import ru.iaygi.dto.UserDTO;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
-import static ru.iaygi.db.data.DbData.*;
+import static ru.iaygi.db.vladimir.DbData.DbData.*;
 
 @Slf4j
 public class DbConnect {
-
     private Connection connection;
     private Statement statement;
     private ResultSet resultSet;
@@ -33,7 +28,7 @@ public class DbConnect {
     }
 
     @Step("SQL insert")
-    public void inseretRequest(String sqlRequest) {
+    public void insertRequest(String sqlRequest) {
         prepareToRequest();
 
         try {
@@ -43,6 +38,58 @@ public class DbConnect {
             throw new RuntimeException(e);
         }
     }
+
+    @Step("SQL update")
+    public void updateRequest(String sqlRequest) {
+        prepareToRequest();
+
+        try {
+            statement.execute(sqlRequest);
+            log.info("JDBC query executed successfully");
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Step("SQL delete")
+    public void deleteRequest(String sqlRequest) {
+        prepareToRequest();
+
+        try {
+            statement.execute(sqlRequest);
+            log.info("JDBC query executed successfully");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Step("SQL create")
+    public void createRequest(String sqlRequest) {
+        prepareToRequest();
+
+        try {
+            statement.execute(sqlRequest);
+            log.info("JDBC query executed successfully");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Step("SQL drop")
+    public void dropRequest(String sqlRequest) {
+        prepareToRequest();
+
+        try {
+            statement.execute(sqlRequest);
+            log.info("JDBC query executed successfully");
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
     @Step("Create connection & statement")
     public void prepareToRequest() {
@@ -68,18 +115,6 @@ public class DbConnect {
         log.debug("Close connection");
         try {
             resultSet.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            statement.close();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
-            connection.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

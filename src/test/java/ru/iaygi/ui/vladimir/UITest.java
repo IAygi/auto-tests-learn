@@ -1,8 +1,12 @@
 package ru.iaygi.ui.vladimir;
 
+import com.codeborne.selenide.Configuration;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
 import ru.iaygi.ui.service.TestBaseUi;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.*;
@@ -18,11 +22,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Feature("Тестирование UI")
 public class UITest extends TestBaseUi {
 
+    private PageObjects pageObjects = new PageObjects();
     private static final boolean USE_SELENOID = true;
 
     @BeforeAll
     public static void setUp() {
         initDriver(USE_SELENOID);
+        Map<String, Object> prefs = new HashMap<>() {
+            {
+                put("credentials_enable_service", false);
+                put("password_manager_enabled", false);
+            }
+        };
+
+        options.setExperimentalOption("prefs", prefs);
+        Configuration.browserCapabilities = options;
     }
 
     @BeforeEach
@@ -32,6 +46,10 @@ public class UITest extends TestBaseUi {
 
     @AfterEach
     void cleanup() {
+    }
+
+    @AfterAll
+    public static void tearDown() {
         closeDriver(USE_SELENOID);
     }
 
@@ -65,6 +83,24 @@ public class UITest extends TestBaseUi {
         step("Проверить условие попадания под стажировку", () -> {
             String conditionText = $(byId("collapse-101")).find("p").shouldBe(visible).getText();
             assertThat(conditionText).contains("Студент 4 курса бакалавриата");
+        });
+    }
+
+    @Test
+    @DisplayName("Авторизация на сайте")
+    @Description("Проверить заголовок после авторизации")
+    public void pageObjectsTest() {
+
+        step("Открыть главную страницу", () -> {
+            pageObjects.openPage();
+        });
+
+        step("Выбрать логин и пароль, авторизоваться под ними", () -> {
+            pageObjects.authorize();
+        });
+
+        step("Проверить заголовок после авторизации, выйти", () -> {
+            pageObjects.checkTitle();
         });
     }
 }
