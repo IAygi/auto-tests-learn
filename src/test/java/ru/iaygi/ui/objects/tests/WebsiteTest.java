@@ -1,4 +1,4 @@
-package ru.iaygi.ui.tests;
+package ru.iaygi.ui.objects.tests;
 
 import com.codeborne.selenide.junit5.TextReportExtension;
 import io.github.artsok.RepeatedIfExceptionsTest;
