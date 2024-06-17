@@ -1,5 +1,26 @@
 pipeline {
     agent any
+	parameters {
+	choice(
+		name: 'TASKS',
+		choices: ['smoke_tests', 'regression_tests', 'ui_tests', 'api_tests', 'test'],
+		description: 'Выбор тестового прогона'
+		)
+	choice(
+		name: 'VNC_ENABLED',
+		choices: ['true', 'false'],
+		description: 'Отображение экрана браузера в Selenoid'
+		)
+	choice(
+		name: 'VIDEO_ENABLED',
+		choices: ['false', 'true'],
+		description: 'Запись видео в Selenoid'
+		)
+    string(
+       name: 'EMAIL',
+       defaultValue: 'test@mail.ru',
+       description: 'Email адреса для отправки результатов тестового прогона, укзываются через запятую')
+	}
     stages {
         stage('Clean') {
           steps {
@@ -7,18 +28,6 @@ pipeline {
             sh './gradlew clean'
           }
         }
-		stage('Test') {
-		  steps {
-			script {
-			try {
-				sh './gradlew test --no-daemon --warning-mode=all'
-			}
-			catch (Exception e) {
-				println("Error ${e}")
-			}
-		  }
-		  }
-		}
     }
 }
 
