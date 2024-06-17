@@ -28,6 +28,18 @@ pipeline {
             sh './gradlew clean'
           }
         }
+		stage('Test') {
+          steps {
+			script {
+			try {
+				sh './gradlew ${TASKS} -Dvnc_enabled=${VNC_ENABLED} -Dselenoid_enabled=true -Dvideo_enabled=${VIDEO_ENABLED} --no-daemon --warning-mode=all'
+			}
+			catch (Exception e) {
+				println("Error ${e}")
+			}
+          }
+		  }
+        }
     }
 }
 
