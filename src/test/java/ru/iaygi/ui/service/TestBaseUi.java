@@ -7,7 +7,6 @@ import io.qameta.allure.Step;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import ru.iaygi.ui.data.TestData;
 
@@ -20,6 +19,7 @@ import static ru.iaygi.common.EndPoints.BASE_URL;
 import static ru.iaygi.ui.data.TestData.SELENOID;
 
 public class TestBaseUi {
+
     public static ChromeOptions options;
     private static RemoteWebDriver driver;
 
@@ -27,34 +27,35 @@ public class TestBaseUi {
     public static void initDriver(boolean useSelenoid) {
 
         Configuration.baseUrl = BASE_URL;
+        Configuration.browserSize = "1920x1080";
+
         if (!useSelenoid) {
             Configuration.holdBrowserOpen = true;
         }
-        Configuration.browserSize = "1920x1080";
-
-        options = new ChromeOptions();
-        options.setCapability("browserVersion", "124.0");
-        options.setCapability("selenoid:options", new HashMap<String, Object>() {
-            {
-                put("name", "Website Test");
-                put("sessionTimeout", "30m");
-                put("enableVNC", TestData.enableVNC);
-                put("screenResolution", "1920x1080x24");
-                put("env", new ArrayList<String>() {
-                    {
-                        add("TZ=UTC");
-                    }
-                });
-                put("labels", new HashMap<String, Object>() {
-                    {
-                        put("manual", "true");
-                    }
-                });
-                put("enableVideo", TestData.enableVideo);
-            }
-        });
 
         if (useSelenoid) {
+            options = new ChromeOptions();
+            options.setCapability("browserVersion", "124.0");
+            options.setCapability("selenoid:options", new HashMap<String, Object>() {
+                {
+                    put("name", "Website Test");
+                    put("sessionTimeout", "30m");
+                    put("enableVNC", TestData.enableVNC);
+                    put("screenResolution", "1920x1080x24");
+                    put("env", new ArrayList<String>() {
+                        {
+                            add("TZ=UTC");
+                        }
+                    });
+                    put("labels", new HashMap<String, Object>() {
+                        {
+                            put("manual", "true");
+                        }
+                    });
+                    put("enableVideo", TestData.enableVideo);
+                }
+            });
+
             try {
                 driver = new RemoteWebDriver(new URL(SELENOID), options);
             } catch (MalformedURLException e) {
