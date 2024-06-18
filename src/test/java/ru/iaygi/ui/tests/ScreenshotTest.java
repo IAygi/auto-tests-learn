@@ -22,6 +22,7 @@ import static ru.iaygi.ui.objects.Elements.ARTICLE_SNIPPET;
 
 @Owner("iaygi")
 @Severity(CRITICAL)
+@Tag("ui_test")
 @Tag("regression")
 @Epic("WebSite")
 @Feature("Основная функциональность")
