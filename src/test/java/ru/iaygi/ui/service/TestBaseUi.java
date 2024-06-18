@@ -8,7 +8,6 @@ import io.qameta.allure.selenide.AllureSelenide;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import ru.iaygi.ui.data.TestData;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static ru.iaygi.common.EndPoints.BASE_URL;
-import static ru.iaygi.ui.data.TestData.SELENOID;
+import static ru.iaygi.ui.data.TestData.*;
 
 public class TestBaseUi {
 
@@ -40,7 +39,7 @@ public class TestBaseUi {
                 {
                     put("name", "Website Test");
                     put("sessionTimeout", "30m");
-                    put("enableVNC", TestData.enableVNC);
+                    put("enableVNC", enableVNC);
                     put("screenResolution", "1920x1080x24");
                     put("env", new ArrayList<String>() {
                         {
@@ -52,7 +51,7 @@ public class TestBaseUi {
                             put("manual", "true");
                         }
                     });
-                    put("enableVideo", TestData.enableVideo);
+                    put("enableVideo", enableVideo);
                 }
             });
 
