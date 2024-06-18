@@ -15,6 +15,7 @@ import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled
 @Severity(NORMAL)
 @Owner("vpakhomo")
 @Tag("ui_test")

@@ -10,7 +10,6 @@ import ru.iaygi.ui.objects.MainPageObjects;
 import ru.iaygi.ui.service.TestBaseUi;
 import ru.iaygi.ui.service.TestResultLoggerExtension;
 
-import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
@@ -56,6 +55,7 @@ public class WebsiteTest extends TestBaseUi {
      */
     @Test
     @Tag("smoke")
+    @Tag("only_one")
     @DisplayName("Проверка главной страницы")
     @Description("Проверить отображение на главной странице заголовка, галереи и подгалереи")
     public void mainPage() {

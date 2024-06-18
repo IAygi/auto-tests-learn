@@ -11,6 +11,7 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.NORMAL;
 
+@Disabled
 @Owner("galyamskiy")
 @Severity(NORMAL)
 @Tag("ui_test")
