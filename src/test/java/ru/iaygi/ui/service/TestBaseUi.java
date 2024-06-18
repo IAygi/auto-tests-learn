@@ -24,6 +24,7 @@ public class TestBaseUi {
 
     @Step("Настройка конфигурации браузера")
     public static void initDriver(boolean useSelenoid) {
+        SelenideLogger.addListener("allure", new AllureSelenide());
 
         Configuration.baseUrl = BASE_URL;
         Configuration.browserSize = "1920x1080";
@@ -63,8 +64,6 @@ public class TestBaseUi {
             driver.manage().window().setSize(new Dimension(1920, 1080));
             WebDriverRunner.setWebDriver(driver);
         }
-
-        SelenideLogger.addListener("allure", new AllureSelenide());
     }
 
     @Step("Закрытие драйвера")
