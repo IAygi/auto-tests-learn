@@ -16,10 +16,6 @@ pipeline {
 		choices: ['false', 'true'],
 		description: 'Запись видео в Selenoid'
 		)
-    string(
-       name: 'EMAIL',
-       defaultValue: 'test@mail.ru',
-       description: 'Email адреса для отправки результатов тестового прогона, укзываются через запятую')
 	}
     stages {
         stage('Clean') {
@@ -40,6 +36,16 @@ pipeline {
           }
 		  }
         }
+        stage('Allure Report') {
+          steps {
+            allure([
+            includeProperties: false,
+            jdk: '',
+            properties: [],
+            reportBuildPolicy: 'ALWAYS',
+            results: [[path: 'build/allure-results']]
+            ])
+          }
+        }
     }
 }
-
