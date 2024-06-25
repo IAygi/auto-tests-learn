@@ -93,7 +93,7 @@ public class WebsiteTest extends TestBaseUi {
         });
 
         step("Проверить заголовок страницы", () -> {
-            assertEquals($(".page-title").getText(), "Контакты?");
+            assertEquals($(".page-title").getText(), "Контакты");
         });
     }
 

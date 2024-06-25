@@ -3,7 +3,7 @@ pipeline {
 	parameters {
 	choice(
 		name: 'TASKS',
-		choices: ['smoke_tests', 'regression_tests', 'ui_tests', 'api_tests', 'test'],
+		choices: ['smoke_tests', 'regression_tests', 'ui_tests', 'api_tests'],
 		description: 'Выбор тестового прогона'
 		)
 	choice(
