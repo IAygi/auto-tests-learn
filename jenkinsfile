@@ -8,7 +8,7 @@ pipeline {
 		)
 	choice(
 		name: 'VNC_ENABLED',
-		choices: ['true', 'false'],
+		choices: ['false', 'true'],
 		description: 'Отображение экрана браузера в Selenoid'
 		)
 	choice(
