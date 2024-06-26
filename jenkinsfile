@@ -17,6 +17,9 @@ pipeline {
 		description: 'Запись видео в Selenoid'
 		)
 	}
+	triggers {
+        cron('H 0 * * *')
+    }
     stages {
         stage('Clean') {
           steps {
