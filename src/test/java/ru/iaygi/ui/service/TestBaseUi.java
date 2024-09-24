@@ -7,6 +7,7 @@ import io.qameta.allure.Step;
 import io.qameta.allure.selenide.AllureSelenide;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.MalformedURLException;
@@ -36,6 +37,7 @@ public class TestBaseUi {
         if (useSelenoid) {
             options = new ChromeOptions();
             options.setCapability("browserVersion", "124.0");
+            options.setCapability(CapabilityType.ACCEPT_INSECURE_CERTS, true);
             options.setCapability("selenoid:options", new HashMap<String, Object>() {
                 {
                     put("name", "Website Test");

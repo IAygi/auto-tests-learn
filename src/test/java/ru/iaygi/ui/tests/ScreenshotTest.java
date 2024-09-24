@@ -1,47 +1,37 @@
 package ru.iaygi.ui.tests;
 
-import com.codeborne.selenide.junit5.TextReportExtension;
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Owner;
 import io.qameta.allure.Severity;
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
+import org.junit.jupiter.api.Test;
+import org.openqa.selenium.WebDriver;
 import ru.iaygi.ui.objects.ScreenshotObject;
 import ru.iaygi.ui.service.TestBaseUi;
-import ru.iaygi.ui.service.TestResultLoggerExtension;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
-import static ru.iaygi.common.EndPoints.ALLURE_REST_ASSURED;
-import static ru.iaygi.common.EndPoints.HABR_POST;
 import static ru.iaygi.ui.data.TestData.enableSelenoid;
-import static ru.iaygi.ui.objects.Elements.ARTICLE_SNIPPET;
 
 @Owner("iaygi")
 @Severity(CRITICAL)
 @Tag("regression")
 @Epic("WebSite")
 @Feature("Основная функциональность")
-@ExtendWith({TextReportExtension.class, TestResultLoggerExtension.class})
 public class ScreenshotTest extends TestBaseUi {
 
     private ScreenshotObject screenshotObject = new ScreenshotObject();
     private static final boolean USE_SELENOID = enableSelenoid;
+    public static WebDriver driver;
 
     @BeforeAll
     public static void setUp() {
         initDriver(USE_SELENOID);
-    }
-
-    @BeforeEach
-    public void init() {
-    }
-
-    @AfterEach
-    public void clear() {
     }
 
     @AfterAll
@@ -51,22 +41,21 @@ public class ScreenshotTest extends TestBaseUi {
 
     @Test
     void checkScreenshot() {
-        step("Открыть главную страницу", () -> {
-            open(ALLURE_REST_ASSURED);
+        step("Открыть страницу", () -> {
+            open("https://allurereport.org/docs/");
         });
-
-        step("Проверить скриншот элемента", () -> {
-            screenshotObject.checkScreenshot($("#allure-rest-assured"), "simpleTestImage", false);
+        step("Проверить скриншот заголовка", () -> {
+            screenshotObject.checkScreenshot($("#allure-report-documentation"), "simpleTestImage", false);
         });
     }
 
     @Test
     void checkExcludeScreenshot() {
-        step("Открыть главную страницу", () -> {
-            open(HABR_POST);
+        step("Открыть страницу", () -> {
+            open("https://allurereport.org/docs/restassured/");
         });
 
-        step("Проверить скриншот элемента", () -> {
+        step("Проверить шапку статьи", () -> {
             screenshotObject.checkScreenshotWithExclude("excludeTestImage", false);
         });
     }
@@ -74,13 +63,12 @@ public class ScreenshotTest extends TestBaseUi {
     @Test
     void checkCropScreenshot() {
         step("Открыть главную страницу", () -> {
-            open(HABR_POST);
+            open("https://allurereport.org/docs/restassured/");
         });
 
         step("Проверить скриншот элемента", () -> {
-            screenshotObject.checkCropScreenshot($(ARTICLE_SNIPPET),
-                    "cropTestImage", true, 0, 30, 0, 90);
+            screenshotObject.checkCropScreenshot($(".content-body"),
+                    "cropTestImage", false, 0, 0, 250, 0);
         });
-
     }
 }

@@ -56,12 +56,12 @@ public class ScreenshotMethods {
         }
 
         if (expectedImage != null && actualImage != null) {
-            diff = new ImageDiffer().makeDiff(actualImage, expectedImage);
-            diffImage = diff.getMarkedImage();
+            diff = new ImageDiffer().makeDiff(expectedImage, actualImage);
         }
 
-        if (diffImage != null && diff.hasDiff()) {
+        if (diff.hasDiff()) {
             try {
+                diffImage = diff.getMarkedImage();
                 File diffFile = new File(PATH + "/different/" + imageName);
                 ImageIO.write(diffImage, "png", diffFile);
             } catch (IOException e) {
@@ -73,54 +73,52 @@ public class ScreenshotMethods {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
 
-        if (diff.hasDiff()) {
             attachImageToAllure(imageName);
-            assertFalse(diff.hasDiff());
+            assertFalse(true);
         }
     }
 
     public void screenshotWithExclude(SelenideElement selenideElement, Set<By> webElements,
                                       String imageName, boolean toCreate) {
-        WebDriver driver = WebDriverRunner.getWebDriver();
         SelenideElement element = selenideElement.should(exist, Duration.ofMillis(10_000));
+        WebDriver driver = WebDriverRunner.getWebDriver();
         ImageDiff diff = null;
         BufferedImage diffImage = null;
         BufferedImage actualImage = null;
-        Screenshot expectedImage = null;
-
-        Screenshot elementScreenshot = new AShot()
-                .shootingStrategy(ShootingStrategies.viewportPasting(100))
-                .ignoredElements(webElements)
-                .coordsProvider(new WebDriverCoordsProvider())
-                .takeScreenshot(driver, element);
-
-        actualImage = elementScreenshot.getImage();
-
-        if (toCreate) {
-            try {
-                ImageIO.write(actualImage, "PNG",
-                        new File(PATH + "/expected/" + imageName));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        Screenshot expectedScreenshot = null;
+        File actualFile = element.getScreenshotAs(OutputType.FILE);
 
         try {
-            expectedImage = new Screenshot(ImageIO.read(new File(PATH + "/expected/" + imageName)));
-            expectedImage.setIgnoredAreas(elementScreenshot.getIgnoredAreas());
+            actualImage = ImageIO.read(actualFile);
+            if (toCreate) {
+                FileUtils.copyFile(actualFile, new File(PATH + "/expected/" + imageName));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        if (expectedImage != null) {
-            diff = new ImageDiffer().makeDiff(elementScreenshot, expectedImage);
-            diffImage = diff.getMarkedImage();
+        Screenshot actualScreenshot = new AShot()
+                .ignoredElements(webElements)
+                .coordsProvider(new WebDriverCoordsProvider())
+                .takeScreenshot(driver, element);
+
+        actualScreenshot.setImage(actualImage);
+
+        try {
+            expectedScreenshot = new Screenshot(ImageIO.read(new File(PATH + "/expected/" + imageName)));
+            expectedScreenshot.setIgnoredAreas(actualScreenshot.getIgnoredAreas());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        if (diffImage != null && diff.hasDiff()) {
+        if (expectedScreenshot != null) {
+            diff = new ImageDiffer().makeDiff(expectedScreenshot, actualScreenshot);
+        }
+
+        if (diff.hasDiff()) {
             try {
+                diffImage = diff.getMarkedImage();
                 File diffFile = new File(PATH + "/different/" + imageName);
                 ImageIO.write(diffImage, "png", diffFile);
             } catch (IOException e) {
@@ -128,22 +126,17 @@ public class ScreenshotMethods {
             }
 
             try {
-                ImageIO.write(actualImage, "PNG",
-                        new File(PATH + "/actual/" + imageName));
+                ImageIO.write(actualImage, "PNG", new File(PATH + "/actual/" + imageName));
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
 
-        if (diff.hasDiff()) {
             attachImageToAllure(imageName);
             assertFalse(true);
         }
     }
 
-    public void cropScreenshot(SelenideElement selenideElement,
-                                              String imageName, Map crop, boolean toCreate) {
-
+    public void cropScreenshot(SelenideElement selenideElement, String imageName, Map crop, boolean toCreate) {
         SelenideElement element = selenideElement.should(exist, Duration.ofMillis(10_000));
         ImageDiff diff = null;
         BufferedImage diffImage = null;
@@ -174,11 +167,11 @@ public class ScreenshotMethods {
         }
 
         if (expectedImage != null && actualImage != null) {
-            diff = new ImageDiffer().makeDiff(actualImage, expectedImage);
-            diffImage = diff.getMarkedImage();
+            diff = new ImageDiffer().makeDiff(expectedImage, actualImage);
         }
 
-        if (diffImage != null && diff.hasDiff()) {
+        if (diff.hasDiff()) {
+            diffImage = diff.getMarkedImage();
             try {
                 File diffFile = new File(PATH + "/different/" + imageName);
                 ImageIO.write(diffImage, "png", diffFile);
@@ -192,14 +185,11 @@ public class ScreenshotMethods {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
 
-        if (diff.hasDiff()) {
             attachImageToAllure(imageName);
             assertFalse(true);
         }
     }
-
 
     public void attachImageToAllure(String imageName) {
         try {

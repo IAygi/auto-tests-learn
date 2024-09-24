@@ -18,12 +18,10 @@ public class ScreenshotObject {
     }
 
     public void checkScreenshotWithExclude(String imageName, boolean toCreate) {
-        SelenideElement element = $("[class=\"tm-article-snippet tm-article-snippet tm-article-presenter__snippet\"]");
-        By webElement = By.cssSelector("[data-test-id=\"articleStats\"]");
-        By webElement2 = By.cssSelector("[class=\"tm-article-datetime-published\"]");
+        SelenideElement element = $(".content-body");
+        By webElement = By.cssSelector(".social-count");
         Set<By> ignoredElements = new HashSet<>();
         ignoredElements.add(webElement);
-        ignoredElements.add(webElement2);
         screenObject.screenshotWithExclude(element, ignoredElements, imageName + ".png", toCreate);
     }
 

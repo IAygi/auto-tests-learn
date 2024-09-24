@@ -6,6 +6,7 @@ import java.time.Duration;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MainPageObjects {
@@ -31,5 +32,9 @@ public class MainPageObjects {
     @Step("Проверить наличие подгалереи")
     public void checkSubGallery() {
         assertTrue($(".foogallery").scrollIntoView(true).isDisplayed());
+    }
+
+    public void testTitle(String title) {
+        assertEquals($(".page-title").getText(), "Контакты?");
     }
 }
