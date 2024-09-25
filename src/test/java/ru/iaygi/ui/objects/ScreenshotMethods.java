@@ -42,6 +42,7 @@ public class ScreenshotMethods {
         try {
             actualImage = ImageIO.read(actualFile);
             if (toCreate) {
+                new File(PATH + "/expected/").mkdirs();
                 FileUtils.copyFile(actualFile, new File(PATH + "/expected/" + imageName));
             }
         } catch (IOException e) {
@@ -59,9 +60,10 @@ public class ScreenshotMethods {
             diff = new ImageDiffer().makeDiff(expectedImage, actualImage);
         }
 
-        if (diff.hasDiff()) {
+        if (diff != null && diff.hasDiff()) {
             try {
                 diffImage = diff.getMarkedImage();
+                new File(PATH + "/different/").mkdirs();
                 File diffFile = new File(PATH + "/different/" + imageName);
                 ImageIO.write(diffImage, "png", diffFile);
             } catch (IOException e) {
@@ -69,6 +71,7 @@ public class ScreenshotMethods {
             }
 
             try {
+                new File(PATH + "/actual/").mkdirs();
                 FileUtils.copyFile(actualFile, new File(PATH + "/actual/" + imageName));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -92,6 +95,7 @@ public class ScreenshotMethods {
         try {
             actualImage = ImageIO.read(actualFile);
             if (toCreate) {
+                new File(PATH + "/expected/").mkdirs();
                 FileUtils.copyFile(actualFile, new File(PATH + "/expected/" + imageName));
             }
         } catch (IOException e) {
@@ -116,9 +120,10 @@ public class ScreenshotMethods {
             diff = new ImageDiffer().makeDiff(expectedScreenshot, actualScreenshot);
         }
 
-        if (diff.hasDiff()) {
+        if (diff != null && diff.hasDiff()) {
             try {
                 diffImage = diff.getMarkedImage();
+                new File(PATH + "/different/").mkdirs();
                 File diffFile = new File(PATH + "/different/" + imageName);
                 ImageIO.write(diffImage, "png", diffFile);
             } catch (IOException e) {
@@ -126,6 +131,7 @@ public class ScreenshotMethods {
             }
 
             try {
+                new File(PATH + "/actual/").mkdirs();
                 ImageIO.write(actualImage, "PNG", new File(PATH + "/actual/" + imageName));
             } catch (IOException e) {
                 e.printStackTrace();
@@ -152,6 +158,7 @@ public class ScreenshotMethods {
                     widthImage, heightImage);
 
             if (toCreate) {
+                new File(PATH + "/expected/").mkdirs();
                 File expectedFile = new File(PATH + "/expected/" + imageName);
                 ImageIO.write(actualImage, "png", expectedFile);
             }
@@ -170,9 +177,10 @@ public class ScreenshotMethods {
             diff = new ImageDiffer().makeDiff(expectedImage, actualImage);
         }
 
-        if (diff.hasDiff()) {
+        if (diff != null && diff.hasDiff()) {
             diffImage = diff.getMarkedImage();
             try {
+                new File(PATH + "/different/").mkdirs();
                 File diffFile = new File(PATH + "/different/" + imageName);
                 ImageIO.write(diffImage, "png", diffFile);
             } catch (IOException e) {
@@ -180,8 +188,8 @@ public class ScreenshotMethods {
             }
 
             try {
-                FileUtils.copyFile(actualFile,
-                        new File(PATH + "/actual/" + imageName));
+                new File(PATH + "/actual/").mkdirs();
+                FileUtils.copyFile(actualFile, new File(PATH + "/actual/" + imageName));
             } catch (IOException e) {
                 e.printStackTrace();
             }
