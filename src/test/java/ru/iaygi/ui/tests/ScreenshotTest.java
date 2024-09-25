@@ -44,6 +44,7 @@ public class ScreenshotTest extends TestBaseUi {
         step("Открыть страницу", () -> {
             open("https://allurereport.org/docs/");
         });
+
         step("Проверить скриншот заголовка", () -> {
             screenshotObject.checkScreenshot($("#allure-report-documentation"), "simpleTestImage", false);
         });
