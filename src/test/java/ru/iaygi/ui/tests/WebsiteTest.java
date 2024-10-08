@@ -1,14 +1,11 @@
 package ru.iaygi.ui.tests;
 
-import com.codeborne.selenide.junit5.TextReportExtension;
 import io.github.artsok.RepeatedIfExceptionsTest;
 import io.qameta.allure.*;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import ru.iaygi.ui.objects.LeagueObject;
 import ru.iaygi.ui.objects.MainPageObjects;
 import ru.iaygi.ui.service.TestBaseUi;
-import ru.iaygi.ui.service.TestResultLoggerExtension;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -16,7 +13,6 @@ import static com.codeborne.selenide.Selenide.open;
 import static io.qameta.allure.Allure.step;
 import static io.qameta.allure.SeverityLevel.CRITICAL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.iaygi.ui.data.TestData.enableSelenoid;
 
 @Owner("iaygi")
 @Severity(CRITICAL)
@@ -24,11 +20,10 @@ import static ru.iaygi.ui.data.TestData.enableSelenoid;
 @Tag("regression")
 @Epic("WebSite")
 @Feature("Основная функциональность")
-@ExtendWith({TextReportExtension.class, TestResultLoggerExtension.class})
 public class WebsiteTest extends TestBaseUi {
 
     private static MainPageObjects mainPageObjects;
-    private static final boolean USE_SELENOID = enableSelenoid;
+    private static final boolean USE_SELENOID = false;
     private LeagueObject leagueObject = new LeagueObject();
 
     @BeforeAll

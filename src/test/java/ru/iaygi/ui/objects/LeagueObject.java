@@ -1,6 +1,11 @@
 package ru.iaygi.ui.objects;
 
 import io.qameta.allure.Allure;
+import io.qameta.allure.Attachment;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.visible;
