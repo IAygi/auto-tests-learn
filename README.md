@@ -56,8 +56,8 @@ task smoke_tests(type: Test) {
 План  обучения:
 
 1. Основы JUnit
-2. Написание тестов для API
-3. Написание тестов для UI
+2. Написание API тестов
+3. Написание UI тестов 
 4. Настройка отчётов в Allure Report
 5. Настройка Selenoid
 6. Интеграция с Allure TestOps
